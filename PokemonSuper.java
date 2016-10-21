@@ -2,6 +2,8 @@ package game;
 
 import java.util.Random;
 
+import javax.swing.JLabel;
+
 class PokemonSuper {
 	
 	public final static int NUM_NORM_MOVES = 4; 
@@ -25,6 +27,11 @@ class PokemonSuper {
 //		System.out.println(n); 
 //		 
 //	}
+	
+	protected JLabel getPlayerSprite() {
+
+		return null; 
+	}
 	
 	protected String setMove() {
 		
