@@ -1,6 +1,20 @@
 package game;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 public class Steel extends PokemonSuper {
+	protected JLabel getPlayerSprite() {
+		ImageIcon imageIcon = new ImageIcon("magnemite-back.png");
+	    JLabel label = new JLabel(imageIcon);
+		return label; 
+	}
+	
+	protected JLabel getPCSprite() {
+		ImageIcon imageIcon = new ImageIcon("magnemite-front.png");
+	    JLabel label = new JLabel(imageIcon);
+		return label; 
+	}
 
 	protected int getMoveType() {
 		return STEEL; 

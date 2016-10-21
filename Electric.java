@@ -1,6 +1,21 @@
 package game;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 public class Electric extends PokemonSuper {
+	
+	protected JLabel getPlayerSprite() {
+		ImageIcon imageIcon = new ImageIcon("pikachu-back.png");
+	    JLabel label = new JLabel(imageIcon);
+		return label; 
+	}
+	
+	protected JLabel getPCSprite() {
+		ImageIcon imageIcon = new ImageIcon("pikachu-front.png");
+	    JLabel label = new JLabel(imageIcon);
+		return label; 
+	}
 	
 	protected int getMoveType() {
 		return ELECTRIC; 

@@ -33,6 +33,11 @@ class PokemonSuper {
 		return null; 
 	}
 	
+	protected JLabel getPCSprite() {
+
+		return null; 
+	}
+	
 	protected String setMove() {
 		
 		return ""; 

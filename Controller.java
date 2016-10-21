@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,12 +11,22 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 class Controller {
 	
 	public final static int NUM_OF_TYPES = 9; 
 	public final static int NUM_OF_POKEMON = 8; 
 	public final static int ASSIGNED_POKEMON = 3; 
+	public final static int NORMAL = 0; 
+	public final static int FIRE = 1; 
+	public final static int WATER = 2; 
+	public final static int ELECTRIC = 3; 
+	public final static int GRASS = 4; 
+	public final static int FIGHTING = 5; 
+	public final static int PSYCHIC = 6; 
+	public final static int STEEL = 7; 
+	public final static int FAIRY = 8;
 	
 	PokemonSuper game = new PokemonSuper();
 	Fire fire = new Fire(); 
@@ -27,24 +38,78 @@ class Controller {
 	Steel steel = new Steel(); 
 	Fairy fairy = new Fairy(); 
 	
+	
 	public static double attackEfficiency[][] = new double[NUM_OF_TYPES][NUM_OF_TYPES]; 
 	public static int pokemon[] = new int[NUM_OF_POKEMON];
+	public static JLabel getSprite[] = new JLabel[NUM_OF_TYPES];
 	
     public JFrame gameJFrame;
     public Container gameContentPane;
     
 	public static Scanner sc;
+	Color background = Color.decode("#A6D785");
     
     public Controller() {
     	
     	gameJFrame = new JFrame("Pokemon Go!");
     	gameJFrame.setSize(400,500);
     	gameJFrame.setLocationRelativeTo(null);
+    	gameContentPane = gameJFrame.getContentPane(); 
+    	gameContentPane.setLayout(null);
+    	gameContentPane.setBackground(background);
     	
-    	gameJFrame.setVisible(true); 
+    	
 		shufflePokemon(); 
 		playerPokemon(); 
 		CPUPokemon();
+		JLabel player1 = getPlayerSprite(pokemon[0]); 
+		JLabel player2 = getPlayerSprite(pokemon[1]);
+		JLabel player3 = getPlayerSprite(pokemon[2]);
+		player1.setBounds(0,200,80,80);
+		player2.setBounds(85,200,80,80);
+		player3.setBounds(165,200,80,80);
+		JLabel pc1 = getPCSprite(pokemon[3]); 
+		JLabel pc2 = getPCSprite(pokemon[4]);
+		JLabel pc3 = getPCSprite(pokemon[5]);
+		pc1.setBounds(400-240,0,80,80);
+		pc2.setBounds(400-160,0,80,80);
+		pc3.setBounds(400-80,0,80,80);
+		gameContentPane.add(player1);
+		gameContentPane.add(player2);
+		gameContentPane.add(player3);
+		gameContentPane.add(pc1);
+		gameContentPane.add(pc2);
+		gameContentPane.add(pc3);
+		gameJFrame.setVisible(true); 
+		
+    }
+    
+    private JLabel getPlayerSprite(int i) {
+    	getSprite[NORMAL] = null; 
+    	getSprite[FIRE] = fire.getPlayerSprite(); 
+    	getSprite[WATER] = water.getPlayerSprite(); 
+    	getSprite[ELECTRIC] = electric.getPlayerSprite(); 
+    	getSprite[GRASS] = grass.getPlayerSprite(); 
+    	getSprite[FIGHTING] = fighting.getPlayerSprite(); 
+    	getSprite[PSYCHIC] = psychic.getPlayerSprite(); 
+    	getSprite[STEEL] = steel.getPlayerSprite(); 
+    	getSprite[FAIRY] = fairy.getPlayerSprite(); 
+    	
+    	return getSprite[i]; 
+    }
+    
+    private JLabel getPCSprite(int i) {
+    	getSprite[NORMAL] = null; 
+    	getSprite[FIRE] = fire.getPCSprite(); 
+    	getSprite[WATER] = water.getPCSprite(); 
+    	getSprite[ELECTRIC] = electric.getPCSprite(); 
+    	getSprite[GRASS] = grass.getPCSprite(); 
+    	getSprite[FIGHTING] = fighting.getPCSprite(); 
+    	getSprite[PSYCHIC] = psychic.getPCSprite(); 
+    	getSprite[STEEL] = steel.getPCSprite(); 
+    	getSprite[FAIRY] = fairy.getPCSprite(); 
+    	
+    	return getSprite[i]; 
     }
     
     
