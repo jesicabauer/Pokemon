@@ -28,6 +28,12 @@ class Controller {
 	public final static int STEEL = 7; 
 	public final static int FAIRY = 8;
 	
+	public int jframeWidth = 400; 
+	public int jframeHeight = 500; 
+	public int imageWidth = 80; 
+	public int imageHeight = 80; 
+	public int plPokePos = 200; 
+	
 	PokemonSuper game = new PokemonSuper();
 	Fire fire = new Fire(); 
 	Water water = new Water();
@@ -36,8 +42,7 @@ class Controller {
 	Fighting fighting = new Fighting(); 
 	Psychic psychic = new Psychic(); 
 	Steel steel = new Steel(); 
-	Fairy fairy = new Fairy(); 
-	
+	Fairy fairy = new Fairy();
 	
 	public static double attackEfficiency[][] = new double[NUM_OF_TYPES][NUM_OF_TYPES]; 
 	public static int pokemon[] = new int[NUM_OF_POKEMON];
@@ -52,7 +57,7 @@ class Controller {
     public Controller() {
     	
     	gameJFrame = new JFrame("Pokemon Go!");
-    	gameJFrame.setSize(400,500);
+    	gameJFrame.setSize(jframeWidth,jframeHeight);
     	gameJFrame.setLocationRelativeTo(null);
     	gameContentPane = gameJFrame.getContentPane(); 
     	gameContentPane.setLayout(null);
@@ -65,15 +70,15 @@ class Controller {
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
 		JLabel player2 = getPlayerSprite(pokemon[1]);
 		JLabel player3 = getPlayerSprite(pokemon[2]);
-		player1.setBounds(0,200,80,80);
-		player2.setBounds(85,200,80,80);
-		player3.setBounds(165,200,80,80);
 		JLabel pc1 = getPCSprite(pokemon[3]); 
 		JLabel pc2 = getPCSprite(pokemon[4]);
 		JLabel pc3 = getPCSprite(pokemon[5]);
-		pc1.setBounds(400-240,0,80,80);
-		pc2.setBounds(400-160,0,80,80);
-		pc3.setBounds(400-80,0,80,80);
+		player1.setBounds(0,plPokePos,imageWidth,imageHeight);
+		player2.setBounds(imageWidth,plPokePos,imageWidth,imageHeight);
+		player3.setBounds(imageWidth*2,plPokePos,imageWidth,imageHeight);
+		pc1.setBounds(jframeWidth-imageWidth*3,0,imageWidth,imageHeight);
+		pc2.setBounds(jframeWidth-imageWidth*2,0,imageWidth,imageHeight);
+		pc3.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
 		gameContentPane.add(player1);
 		gameContentPane.add(player2);
 		gameContentPane.add(player3);
