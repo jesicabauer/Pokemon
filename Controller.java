@@ -50,6 +50,8 @@ class Controller {
     public JFrame gameJFrame;
     public Container gameContentPane;
     public JPanel gameJPanel; 
+    public JPanel playerPanel;
+    public JPanel CPUPanel; 
     
 	public static Scanner sc;
 	
@@ -90,7 +92,9 @@ class Controller {
     	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
     	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
     	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
-		
+    	
+		CreateIDBoxes(playerPanel,1,50);
+
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
 		JLabel player2 = getPlayerSprite(pokemon[1]);
 		JLabel player3 = getPlayerSprite(pokemon[2]);
@@ -146,6 +150,7 @@ class Controller {
     	
     	return getSprite[i]; 
     }
+
     
     private String getActiveTypeMove(int i) {
     	getMove[NORMAL] = null; 
@@ -161,7 +166,7 @@ class Controller {
     	return getMove[i]; 
     }
     
-    
+
 	
 	public static void typeMatrix() throws FileNotFoundException {
 		sc = new Scanner(new File("type-matrix.txt"));
@@ -197,6 +202,7 @@ class Controller {
 		for (int i = 0; i < ASSIGNED_POKEMON; i++ ) {
 			System.out.println(whichPokemon(pokemon[i]));
 		}
+		
 	}
 	
 	private void CPUPokemon() {
@@ -204,6 +210,15 @@ class Controller {
 		for (int i = ASSIGNED_POKEMON; i < ASSIGNED_POKEMON*2; i++ ) {
 			System.out.println(whichPokemon(pokemon[i]));
 		}
+	}
+	
+	private void CreateIDBoxes(JPanel myPanel, int Pokemon, int PokemonDamage){
+		JLabel PokemonName = new JLabel(whichPokemon(Pokemon));
+		JLabel Health = new JLabel(PokemonDamage+"/50");
+		
+		myPanel.add(PokemonName);
+		myPanel.add(Health);
+		
 	}
 	
 	public String whichPokemon(int i){
@@ -219,6 +234,12 @@ class Controller {
 			case 8: return fairy.getName();
 		}
 		return "Oh no";
+	}
+	
+	
+	public String DamageMessage(){
+		String Damage = "We need to do this";
+		return Damage;
 	}
 	
 	
