@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -10,8 +11,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 class Controller {
 	
@@ -28,12 +32,6 @@ class Controller {
 	public final static int STEEL = 7; 
 	public final static int FAIRY = 8;
 	
-	public int jframeWidth = 400; 
-	public int jframeHeight = 500; 
-	public int imageWidth = 80; 
-	public int imageHeight = 80; 
-	public int plPokePos = 200; 
-	
 	PokemonSuper game = new PokemonSuper();
 	Fire fire = new Fire(); 
 	Water water = new Water();
@@ -47,44 +45,76 @@ class Controller {
 	public static double attackEfficiency[][] = new double[NUM_OF_TYPES][NUM_OF_TYPES]; 
 	public static int pokemon[] = new int[NUM_OF_POKEMON];
 	public static JLabel getSprite[] = new JLabel[NUM_OF_TYPES];
+	public static String getMove[] = new String[NUM_OF_TYPES];
 	
     public JFrame gameJFrame;
     public Container gameContentPane;
+    public JPanel gameJPanel; 
     
 	public static Scanner sc;
-	Color background = Color.decode("#A6D785");
+	
+	public int jframeWidth = 400; 
+	public int jframeHeight = 500; 
+	public int imageWidth = 80; 
+	public int imageHeight = 80; 
+	public int plPokePos = 200; 
+	public final static Color GREEN = Color.decode("#A6D785");
+	public final static Color WHITE = Color.decode("#FFFFFF");
     
     public Controller() {
+    	
+    	shufflePokemon(); 
+		playerPokemon(); 
+		CPUPokemon();
     	
     	gameJFrame = new JFrame("Pokemon Go!");
     	gameJFrame.setSize(jframeWidth,jframeHeight);
     	gameJFrame.setLocationRelativeTo(null);
+    	
     	gameContentPane = gameJFrame.getContentPane(); 
     	gameContentPane.setLayout(null);
-    	gameContentPane.setBackground(background);
+    	gameContentPane.setBackground(GREEN);
     	
+    	gameJPanel = new JPanel(); 
+    	gameJPanel.setBackground(WHITE);
+    	gameJPanel.setBounds(0,plPokePos+imageWidth,385,180);
+    	gameJPanel.setLayout(new GridLayout(2,0));
     	
-		shufflePokemon(); 
-		playerPokemon(); 
-		CPUPokemon();
+    	gameJPanel.add(new JLabel("Fight"));
+    	gameJPanel.add(new JLabel(""));
+    	gameJPanel.add(new JLabel(""));
+    	gameJPanel.add(new JLabel("Switch"));
+    	gameJPanel.add(new JLabel(""));
+    	gameJPanel.add(new JButton("NORMAL MOVE"));
+    	gameJPanel.add(new JButton(getActiveTypeMove(pokemon[0])));
+    	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
+    	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
+    	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
+		
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
 		JLabel player2 = getPlayerSprite(pokemon[1]);
 		JLabel player3 = getPlayerSprite(pokemon[2]);
 		JLabel pc1 = getPCSprite(pokemon[3]); 
 		JLabel pc2 = getPCSprite(pokemon[4]);
 		JLabel pc3 = getPCSprite(pokemon[5]);
+		
 		player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 		player2.setBounds(imageWidth,plPokePos,imageWidth,imageHeight);
 		player3.setBounds(imageWidth*2,plPokePos,imageWidth,imageHeight);
 		pc1.setBounds(jframeWidth-imageWidth*3,0,imageWidth,imageHeight);
 		pc2.setBounds(jframeWidth-imageWidth*2,0,imageWidth,imageHeight);
 		pc3.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
+		
 		gameContentPane.add(player1);
 		gameContentPane.add(player2);
 		gameContentPane.add(player3);
 		gameContentPane.add(pc1);
 		gameContentPane.add(pc2);
 		gameContentPane.add(pc3);
+		gameContentPane.add(gameJPanel);
+		
+		
+		gameJPanel.setVisible(true);
 		gameJFrame.setVisible(true); 
 		
     }
@@ -115,6 +145,20 @@ class Controller {
     	getSprite[FAIRY] = fairy.getPCSprite(); 
     	
     	return getSprite[i]; 
+    }
+    
+    private String getActiveTypeMove(int i) {
+    	getMove[NORMAL] = null; 
+    	getMove[FIRE] = fire.getMove(); 
+    	getMove[WATER] = water.getMove(); 
+    	getMove[ELECTRIC] = electric.getMove(); 
+    	getMove[GRASS] = grass.getMove(); 
+    	getMove[FIGHTING] = fighting.getMove(); 
+    	getMove[PSYCHIC] = psychic.getMove(); 
+    	getMove[STEEL] = steel.getMove(); 
+    	getMove[FAIRY] = fairy.getMove(); 
+    	
+    	return getMove[i]; 
     }
     
     
