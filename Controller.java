@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 class Controller {
 	
@@ -45,13 +46,15 @@ class Controller {
 	
 	public static double attackEfficiency[][] = new double[NUM_OF_TYPES][NUM_OF_TYPES]; 
 	public static int pokemon[] = new int[NUM_OF_POKEMON];
+	public static int pokemonHealth[] = new int[NUM_OF_POKEMON];
 	public static JLabel getSprite[] = new JLabel[NUM_OF_TYPES];
-	public static String getButtonSprite[] = new String[NUM_OF_TYPES];
+	public static ImageIcon getButtonSprite[] = new ImageIcon[NUM_OF_TYPES];
 	public static String getMove[] = new String[NUM_OF_TYPES];
 	
     public JFrame gameJFrame;
     public Container gameContentPane;
-    public JPanel gameJPanel; 
+    public JPanel fightJPanel; 
+    public JPanel switchJPanel;
     public JPanel playerPanel;
     public JPanel CPUPanel; 
     
@@ -79,21 +82,25 @@ class Controller {
     	gameContentPane.setLayout(null);
     	gameContentPane.setBackground(GREEN);
     	
-    	gameJPanel = new JPanel(); 
-    	gameJPanel.setBackground(WHITE);
-    	gameJPanel.setBounds(0,plPokePos+imageWidth,385,180);
-    	gameJPanel.setLayout(new GridLayout(2,0));
+    	fightJPanel = new JPanel(); 
+    	fightJPanel.setBackground(WHITE);
+    	fightJPanel.setBounds(0,plPokePos+imageWidth,200,180);
+    	fightJPanel.setLayout(new GridLayout(3,1));
+    	fightJPanel.add(new JLabel("Fight", SwingConstants.CENTER));
+    	fightJPanel.add(new JButton("NORMAL MOVE"));
+    	fightJPanel.add(new JButton(getActiveTypeMove(pokemon[0])));
     	
-    	gameJPanel.add(new JLabel("Fight"));
-    	gameJPanel.add(new JLabel(""));
-    	gameJPanel.add(new JLabel(""));
-    	gameJPanel.add(new JLabel("Switch"));
-    	gameJPanel.add(new JLabel(""));
-    	gameJPanel.add(new JButton("NORMAL MOVE"));
-    	gameJPanel.add(new JButton(getActiveTypeMove(pokemon[0])));
-    	gameJPanel.add(new JButton(new ImageIcon(getButtonSprite(pokemon[0]))));
-    	gameJPanel.add(new JButton(new ImageIcon(getButtonSprite(pokemon[1]))));
-    	gameJPanel.add(new JButton(new ImageIcon(getButtonSprite(pokemon[2]))));
+    	switchJPanel = new JPanel(); 
+    	switchJPanel.setBackground(WHITE);
+    	switchJPanel.setBounds(200,plPokePos+imageWidth,185,180);
+    	switchJPanel.setLayout(new GridLayout(2,3));
+    	switchJPanel.add(new JLabel(""));
+    	switchJPanel.add(new JLabel("Switch", SwingConstants.CENTER));
+    	switchJPanel.add(new JLabel(""));
+
+    	switchJPanel.add(new JButton(getButtonSprite(pokemon[0])));
+    	switchJPanel.add(new JButton(getButtonSprite(pokemon[1])));
+    	switchJPanel.add(new JButton(getButtonSprite(pokemon[2])));
 
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
 		JLabel pc1 = getPCSprite(pokemon[3]); 
@@ -102,7 +109,8 @@ class Controller {
 		
 		gameContentPane.add(player1);
 		gameContentPane.add(pc1);
-		gameContentPane.add(gameJPanel);
+		gameContentPane.add(fightJPanel);
+		gameContentPane.add(switchJPanel);
 
 		playerPanel = CreateIDBoxes(pokemon[0],50);
 		CPUPanel = CreateIDBoxes(pokemon[3],50);		
@@ -113,7 +121,8 @@ class Controller {
 		gameContentPane.add(CPUPanel);
 		
 		
-		gameJPanel.setVisible(true);
+		fightJPanel.setVisible(true);
+		switchJPanel.setVisible(true);
 		gameJFrame.setVisible(true); 
 		
     }
@@ -146,7 +155,7 @@ class Controller {
     	return getSprite[i]; 
     }
     
-    private String getButtonSprite(int i){
+    private ImageIcon getButtonSprite(int i){
     	getButtonSprite[FIRE] = fire.getButtonSprite(); 
     	getButtonSprite[WATER] = water.getButtonSprite(); 
     	getButtonSprite[ELECTRIC] = electric.getButtonSprite(); 
@@ -202,6 +211,7 @@ class Controller {
 		
 		for (int i = 0; i < NUM_OF_POKEMON; i++) {
 			pokemon[i] = temp.get(i);
+			pokemonHealth[i] = MAX_HEALTH; 
 //			System.out.print(pokemon[i]);
 		}
 //		System.out.println();

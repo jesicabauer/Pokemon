@@ -1,7 +1,9 @@
 package game;
 
 import java.util.Random;
+import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 class PokemonSuper {
@@ -38,9 +40,9 @@ class PokemonSuper {
 		return null; 
 	}
 	
-	protected String getButtonSprite(){
+	protected ImageIcon getButtonSprite(){
 		
-		return null;
+		return null; 
 	}
 	
 	protected String setMove() {
