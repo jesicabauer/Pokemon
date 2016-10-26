@@ -38,6 +38,11 @@ class PokemonSuper {
 		return null; 
 	}
 	
+	protected String getButtonSprite(){
+		
+		return null;
+	}
+	
 	protected String setMove() {
 		
 		return "SUPER CLASS"; 

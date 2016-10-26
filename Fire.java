@@ -16,6 +16,9 @@ public class Fire extends PokemonSuper {
 	    JLabel label = new JLabel(imageIcon);
 		return label; 
 	}
+	protected String getButtonSprite(){
+		return "charmander-front.png";
+	}
 
 	protected int getMoveType() {
 		return FIRE; 

@@ -17,6 +17,10 @@ public class Water extends PokemonSuper {
 		return label; 
 	}
 	
+	protected String getButtonSprite(){
+		return "squirtle-front.png";
+	}
+	
 	protected int getMoveType() {
 		return WATER; 
 	}

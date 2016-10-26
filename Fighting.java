@@ -17,6 +17,10 @@ public class Fighting  extends PokemonSuper {
 		return label; 
 	}
 	
+	protected String getButtonSprite(){
+		return "mankey-front.png";
+	}
+	
 	protected int getMoveType() {
 		return FIGHTING; 
 	}

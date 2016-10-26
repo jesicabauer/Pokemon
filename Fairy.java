@@ -17,6 +17,10 @@ public class Fairy extends PokemonSuper {
 		return label; 
 	}
 
+	protected String getButtonSprite(){
+		return "jigglypuff-front.png";
+	}
+
 	protected int getMoveType() {
 		return FAIRY; 
 	}

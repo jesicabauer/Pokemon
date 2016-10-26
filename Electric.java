@@ -17,6 +17,11 @@ public class Electric extends PokemonSuper {
 		return label; 
 	}
 	
+	protected String getButtonSprite(){
+		return "pikachu-front.png";
+	}
+
+	
 	protected int getMoveType() {
 		return ELECTRIC; 
 	}
