@@ -15,6 +15,10 @@ public class Steel extends PokemonSuper {
 	    JLabel label = new JLabel(imageIcon);
 		return label; 
 	}
+	
+	protected String getButtonSprite(){
+		return "magnemite-front.png";
+	}
 
 	protected int getMoveType() {
 		return STEEL; 

@@ -16,6 +16,10 @@ public class Psychic  extends PokemonSuper {
 	    JLabel label = new JLabel(imageIcon);
 		return label; 
 	}
+	
+	protected String getButtonSprite(){
+		return "abra-front.png";
+	}
 
 	protected int getMoveType() {
 		return PSYCHIC; 

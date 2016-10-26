@@ -16,6 +16,10 @@ public class Grass extends PokemonSuper {
 	    JLabel label = new JLabel(imageIcon);
 		return label; 
 	}
+	
+	protected String getButtonSprite(){
+		return "bulbasaur-front.png";
+	}
 
 	protected int getMoveType() {
 		return GRASS; 

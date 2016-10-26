@@ -45,6 +45,7 @@ class Controller {
 	public static double attackEfficiency[][] = new double[NUM_OF_TYPES][NUM_OF_TYPES]; 
 	public static int pokemon[] = new int[NUM_OF_POKEMON];
 	public static JLabel getSprite[] = new JLabel[NUM_OF_TYPES];
+	public static String getButtonSprite[] = new String[NUM_OF_TYPES];
 	public static String getMove[] = new String[NUM_OF_TYPES];
 	
     public JFrame gameJFrame;
@@ -89,12 +90,10 @@ class Controller {
     	gameJPanel.add(new JLabel(""));
     	gameJPanel.add(new JButton("NORMAL MOVE"));
     	gameJPanel.add(new JButton(getActiveTypeMove(pokemon[0])));
-    	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
-    	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
-    	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
+    	gameJPanel.add(new JButton(new ImageIcon(getButtonSprite(pokemon[0]))));
+    	gameJPanel.add(new JButton(new ImageIcon(getButtonSprite(pokemon[1]))));
+    	gameJPanel.add(new JButton(new ImageIcon(getButtonSprite(pokemon[2]))));
     	
-		CreateIDBoxes(playerPanel,1,50);
-
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
 		JLabel player2 = getPlayerSprite(pokemon[1]);
 		JLabel player3 = getPlayerSprite(pokemon[2]);
@@ -110,12 +109,20 @@ class Controller {
 		pc3.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
 		
 		gameContentPane.add(player1);
-		gameContentPane.add(player2);
-		gameContentPane.add(player3);
-		gameContentPane.add(pc1);
-		gameContentPane.add(pc2);
+//		gameContentPane.add(player2);
+//		gameContentPane.add(player3);
+//		gameContentPane.add(pc1);
+//		gameContentPane.add(pc2);
 		gameContentPane.add(pc3);
 		gameContentPane.add(gameJPanel);
+
+		playerPanel = CreateIDBoxes(pokemon[0],50);
+		CPUPanel = CreateIDBoxes(pokemon[3],50);		
+		playerPanel.setBounds(imageWidth, plPokePos, jframeWidth-imageWidth, imageHeight);
+		CPUPanel.setBounds(0,0, jframeWidth - imageWidth, imageHeight);
+		
+		gameContentPane.add(playerPanel);
+		gameContentPane.add(CPUPanel);
 		
 		
 		gameJPanel.setVisible(true);
@@ -149,6 +156,21 @@ class Controller {
     	getSprite[FAIRY] = fairy.getPCSprite(); 
     	
     	return getSprite[i]; 
+    }
+    
+    private String getButtonSprite(int i){
+    	getButtonSprite[FIRE] = fire.getButtonSprite(); 
+    	getButtonSprite[WATER] = water.getButtonSprite(); 
+    	getButtonSprite[ELECTRIC] = electric.getButtonSprite(); 
+    	getButtonSprite[GRASS] = grass.getButtonSprite(); 
+    	getButtonSprite[FIGHTING] = fighting.getButtonSprite(); 
+    	getButtonSprite[PSYCHIC] = psychic.getButtonSprite(); 
+    	getButtonSprite[STEEL] = steel.getButtonSprite(); 
+    	getButtonSprite[FAIRY] = fairy.getButtonSprite();
+    	
+    	
+    	return getButtonSprite[i];
+    	
     }
 
     
@@ -212,13 +234,14 @@ class Controller {
 		}
 	}
 	
-	private void CreateIDBoxes(JPanel myPanel, int Pokemon, int PokemonDamage){
+	private JPanel CreateIDBoxes(int Pokemon, int PokemonDamage){
+		JPanel myPanel = new JPanel();
 		JLabel PokemonName = new JLabel(whichPokemon(Pokemon));
 		JLabel Health = new JLabel(PokemonDamage+"/50");
 		
 		myPanel.add(PokemonName);
 		myPanel.add(Health);
-		
+		return myPanel;
 	}
 	
 	public String whichPokemon(int i){
