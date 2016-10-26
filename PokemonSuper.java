@@ -40,7 +40,7 @@ class PokemonSuper {
 	
 	protected String setMove() {
 		
-		return ""; 
+		return "SUPER CLASS"; 
 	}
 	
 	protected int getMoveType() {

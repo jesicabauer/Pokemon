@@ -93,7 +93,7 @@ class Controller {
     	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
     	gameJPanel.add(new JButton(new ImageIcon("charmander-front.png")));
     	
-		CreateIDBoxes(playerPanel,1,50);
+//		CreateIDBoxes(playerPanel,1,50);
 
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
 		JLabel player2 = getPlayerSprite(pokemon[1]);
@@ -212,14 +212,14 @@ class Controller {
 		}
 	}
 	
-	private void CreateIDBoxes(JPanel myPanel, int Pokemon, int PokemonDamage){
-		JLabel PokemonName = new JLabel(whichPokemon(Pokemon));
-		JLabel Health = new JLabel(PokemonDamage+"/50");
-		
-		myPanel.add(PokemonName);
-		myPanel.add(Health);
-		
-	}
+//	private void CreateIDBoxes(JPanel myPanel, int Pokemon, int PokemonDamage){
+//		JLabel PokemonName = new JLabel(whichPokemon(Pokemon));
+//		JLabel Health = new JLabel(PokemonDamage+"/50");
+//		
+//		myPanel.add(PokemonName);
+//		myPanel.add(Health);
+//		
+//	}
 	
 	public String whichPokemon(int i){
 		switch(i){
