@@ -31,6 +31,7 @@ class Controller {
 	public final static int PSYCHIC = 6; 
 	public final static int STEEL = 7; 
 	public final static int FAIRY = 8;
+	public final static int MAX_HEALTH = 50; 
 	
 	PokemonSuper game = new PokemonSuper();
 	Fire fire = new Fire(); 
@@ -95,25 +96,12 @@ class Controller {
     	gameJPanel.add(new JButton(new ImageIcon(getButtonSprite(pokemon[2]))));
 
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
-		JLabel player2 = getPlayerSprite(pokemon[1]);
-		JLabel player3 = getPlayerSprite(pokemon[2]);
 		JLabel pc1 = getPCSprite(pokemon[3]); 
-		JLabel pc2 = getPCSprite(pokemon[4]);
-		JLabel pc3 = getPCSprite(pokemon[5]);
-		
 		player1.setBounds(0,plPokePos,imageWidth,imageHeight);
-		player2.setBounds(imageWidth,plPokePos,imageWidth,imageHeight);
-		player3.setBounds(imageWidth*2,plPokePos,imageWidth,imageHeight);
-		pc1.setBounds(jframeWidth-imageWidth*3,0,imageWidth,imageHeight);
-		pc2.setBounds(jframeWidth-imageWidth*2,0,imageWidth,imageHeight);
-		pc3.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
+		pc1.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
 		
 		gameContentPane.add(player1);
-//		gameContentPane.add(player2);
-//		gameContentPane.add(player3);
-//		gameContentPane.add(pc1);
-//		gameContentPane.add(pc2);
-		gameContentPane.add(pc3);
+		gameContentPane.add(pc1);
 		gameContentPane.add(gameJPanel);
 
 		playerPanel = CreateIDBoxes(pokemon[0],50);
@@ -238,7 +226,7 @@ class Controller {
 	private JPanel CreateIDBoxes(int Pokemon, int PokemonDamage){
 		JPanel myPanel = new JPanel();
 		JLabel PokemonName = new JLabel(whichPokemon(Pokemon));
-		JLabel Health = new JLabel(PokemonDamage+"/50");
+		JLabel Health = new JLabel(PokemonDamage+"/" + MAX_HEALTH);
 		
 		myPanel.add(PokemonName);
 		myPanel.add(Health);
