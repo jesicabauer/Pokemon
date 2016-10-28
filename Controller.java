@@ -3,6 +3,8 @@ package game;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-class Controller {
+class Controller implements ActionListener {
 	
 	public final static int NUM_OF_TYPES = 9; 
 	public final static int NUM_OF_POKEMON = 8; 
@@ -68,7 +70,10 @@ class Controller {
 	public final static Color GREEN = Color.decode("#A6D785");
 	public final static Color WHITE = Color.decode("#FFFFFF");
     
-    public Controller() {
+	protected int PlayerActive = 0;
+	protected int CPUActive = 3;
+	
+    public Controller()  {
     	
     	shufflePokemon(); 
 		playerPokemon(); 
@@ -88,7 +93,7 @@ class Controller {
     	fightJPanel.setLayout(new GridLayout(3,1));
     	fightJPanel.add(new JLabel("Fight", SwingConstants.CENTER));
     	fightJPanel.add(new JButton("NORMAL MOVE"));
-    	fightJPanel.add(new JButton(getActiveTypeMove(pokemon[0])));
+    	fightJPanel.add(new JButton(getActiveTypeMove(pokemon[PlayerActive])));
     	
     	switchJPanel = new JPanel(); 
     	switchJPanel.setBackground(WHITE);
@@ -258,13 +263,34 @@ class Controller {
 		}
 		return "Oh no";
 	}
-	
-	
-	public String DamageMessage(){
-		String Damage = "We need to do this";
-		return Damage;
+		
+	protected JLabel DamageMessage(){
+		String Damage = "You did "+ "(create getDamage method) damage to "+whichPokemon(pokemon[CPUActive]);
+		JLabel myLabel = new JLabel(Damage);
+		return myLabel;
 	}
 	
+	protected String SwitchMessage(){
+		String message = "You switched to"+whichPokemon(pokemon[PlayerActive]);		
+		return message;
+	}
+	
+	public void actionPerformed(ActionEvent event){
+		if(event.getSource() == normButton){ // Normal move
+			DamageMessage();
+		}else if(event.getSource() == typeButton){ // Type move
+			DamageMessage();
+		}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
+			PlayerActive = 0;
+			SwitchMessage();
+		}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
+			PlayerActive = 1;
+			SwitchMessage();
+		}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
+			PlayerActive = 2;
+			SwitchMessage();
+		}
+	}
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
