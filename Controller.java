@@ -61,6 +61,8 @@ class Controller implements ActionListener {
     public JButton switch1Button; 
     public JButton switch2Button; 
     public JButton switch3Button; 
+    public JLabel player1;
+    public JLabel pc1;
     
 	public static Scanner sc;
 	
@@ -97,6 +99,8 @@ class Controller implements ActionListener {
     	
     	normButton = new JButton("NORMAL MOVE");
     	typeButton = new JButton(getActiveTypeMove(pokemon[PlayerActive]));
+    	normButton.addActionListener(this);
+    	typeButton.addActionListener(this);
     	normButton.setBackground(WHITE);
     	typeButton.setBackground(WHITE);
     	fightJPanel.add(normButton);
@@ -110,6 +114,9 @@ class Controller implements ActionListener {
     	switch1Button = new JButton(getButtonSprite(pokemon[0]));
     	switch2Button = new JButton(getButtonSprite(pokemon[1]));
     	switch3Button = new JButton(getButtonSprite(pokemon[2]));
+    	switch1Button.addActionListener(this);
+    	switch2Button.addActionListener(this);
+    	switch3Button.addActionListener(this);
     	switch1Button.setBackground(GREEN);
     	switch2Button.setBackground(GREEN);
     	switch3Button.setBackground(GREEN);
@@ -119,8 +126,8 @@ class Controller implements ActionListener {
     	switchJPanel.add(switch3Button); 
     	
 
-		JLabel player1 = getPlayerSprite(pokemon[0]); 
-		JLabel pc1 = getPCSprite(pokemon[3]); 
+		player1 = getPlayerSprite(pokemon[PlayerActive]); 
+		pc1 = getPCSprite(pokemon[CPUActive]); 
 		player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 		pc1.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
 		
@@ -283,7 +290,7 @@ class Controller implements ActionListener {
 	}
 	
 	protected String SwitchMessage(){
-		String message = "You switched to"+whichPokemon(pokemon[PlayerActive]);		
+		String message = "You switched to "+whichPokemon(pokemon[PlayerActive])+"!";		
 		return message;
 	}
 	
@@ -296,16 +303,26 @@ class Controller implements ActionListener {
 			System.out.println("type button pushed");
 		}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 			PlayerActive = 0;
-			System.out.println("Switch 1 button pushed");
-			SwitchMessage();
+			System.out.println(SwitchMessage());
+			player1.setVisible(false); 
+			player1 = getPlayerSprite(pokemon[PlayerActive]);
+			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
+			gameContentPane.add(player1);
 		}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
 			PlayerActive = 1;
-			System.out.println("Switch 2 button pushed");
-			SwitchMessage();
+			System.out.println(SwitchMessage());
+			player1.setVisible(false); 
+			player1 = getPlayerSprite(pokemon[PlayerActive]);
+			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
+			gameContentPane.add(player1);
 		}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
 			PlayerActive = 2;
-			System.out.println("Switch 3 button pushed");
-			SwitchMessage();
+			System.out.println(SwitchMessage());
+			player1.setVisible(false); 
+			player1 = getPlayerSprite(pokemon[PlayerActive]);
+			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
+			gameContentPane.add(player1);
+
 		}
 	}
 	
