@@ -35,6 +35,6 @@ public class Psychic  extends PokemonSuper {
 	}
 	
 	protected String getMove() {
-		return "DREAM EATER";
+		return "CONFUSION";
 	}
 }

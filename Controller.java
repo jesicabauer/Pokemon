@@ -309,7 +309,7 @@ class Controller implements ActionListener {
 			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 			gameContentPane.add(player1);
 			typeButton.setVisible(false);
-			typeButton.setText(getActiveTypeMove(pokemon[PlayerActive]));
+			typeButton.setText("<html><center>" + getActiveTypeMove(pokemon[PlayerActive]) + "<br><font size=1>(TYPE)</font></center></html>");
 			typeButton.setVisible(true);
 			playerPanel.setVisible(false);
 			playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
@@ -324,7 +324,7 @@ class Controller implements ActionListener {
 			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 			gameContentPane.add(player1);
 			typeButton.setVisible(false);
-			typeButton.setText(getActiveTypeMove(pokemon[PlayerActive]));
+			typeButton.setText("<html><center>" + getActiveTypeMove(pokemon[PlayerActive]) + "<br><font size=1>(TYPE)</font></center></html>");
 			typeButton.setVisible(true);
 			playerPanel.setVisible(false);
 			playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
@@ -339,7 +339,7 @@ class Controller implements ActionListener {
 			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 			gameContentPane.add(player1);
 			typeButton.setVisible(false);
-			typeButton.setText(getActiveTypeMove(pokemon[PlayerActive]));
+			typeButton.setText("<html><center>" + getActiveTypeMove(pokemon[PlayerActive]) + "<br><font size=1>(TYPE)</font></center></html>");
 			typeButton.setVisible(true);
 			playerPanel.setVisible(false);
 			playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
