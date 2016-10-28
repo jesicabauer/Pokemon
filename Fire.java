@@ -1,7 +1,5 @@
 package game;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -20,10 +18,7 @@ public class Fire extends PokemonSuper {
 	}
 	
 	protected ImageIcon getButtonSprite(){
-		ImageIcon imageIconOrg = new ImageIcon("charmander-front.png");
-		Image imageOrg = imageIconOrg.getImage(); 
-		Image image = imageOrg.getScaledInstance(50, 50, 1);
-		ImageIcon imageIcon = new ImageIcon(image);
+		ImageIcon imageIcon = new ImageIcon("charmander-front.png");
 		return imageIcon; 
 	}
 
