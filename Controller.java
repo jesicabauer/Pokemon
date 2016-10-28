@@ -97,8 +97,8 @@ class Controller implements ActionListener {
     	fightJPanel.setBounds(0,plPokePos+imageWidth,385,90);
     	fightJPanel.setLayout(new GridLayout(1,2));
     	
-    	normButton = new JButton("NORMAL MOVE");
-    	typeButton = new JButton(getActiveTypeMove(pokemon[PlayerActive]));
+    	normButton = new JButton("<html><center>NORMAL MOVE<br><font size=1>(NORMAL)</font></center></html>");
+    	typeButton = new JButton("<html><center>" + getActiveTypeMove(pokemon[PlayerActive]) + "<br><font size=1>(TYPE)</font></center></html>");
     	normButton.addActionListener(this);
     	typeButton.addActionListener(this);
     	normButton.setBackground(WHITE);
@@ -136,8 +136,8 @@ class Controller implements ActionListener {
 		gameContentPane.add(fightJPanel);
 		gameContentPane.add(switchJPanel);
 
-		playerPanel = CreateIDBoxes(pokemon[0],50);
-		CPUPanel = CreateIDBoxes(pokemon[3],50);		
+		playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
+		CPUPanel = CreateIDBoxes(pokemon[CPUActive],50);		
 		playerPanel.setBounds(imageWidth, plPokePos, jframeWidth-imageWidth, imageHeight);
 		CPUPanel.setBounds(0,0, jframeWidth - imageWidth, imageHeight);
 		
@@ -308,6 +308,14 @@ class Controller implements ActionListener {
 			player1 = getPlayerSprite(pokemon[PlayerActive]);
 			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 			gameContentPane.add(player1);
+			typeButton.setVisible(false);
+			typeButton.setText(getActiveTypeMove(pokemon[PlayerActive]));
+			typeButton.setVisible(true);
+			playerPanel.setVisible(false);
+			playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
+			playerPanel.setBounds(imageWidth, plPokePos, jframeWidth-imageWidth, imageHeight);
+			gameContentPane.add(playerPanel);
+			playerPanel.setVisible(true);
 		}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
 			PlayerActive = 1;
 			System.out.println(SwitchMessage());
@@ -315,6 +323,14 @@ class Controller implements ActionListener {
 			player1 = getPlayerSprite(pokemon[PlayerActive]);
 			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 			gameContentPane.add(player1);
+			typeButton.setVisible(false);
+			typeButton.setText(getActiveTypeMove(pokemon[PlayerActive]));
+			typeButton.setVisible(true);
+			playerPanel.setVisible(false);
+			playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
+			playerPanel.setBounds(imageWidth, plPokePos, jframeWidth-imageWidth, imageHeight);
+			gameContentPane.add(playerPanel);
+			playerPanel.setVisible(true);
 		}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
 			PlayerActive = 2;
 			System.out.println(SwitchMessage());
@@ -322,7 +338,14 @@ class Controller implements ActionListener {
 			player1 = getPlayerSprite(pokemon[PlayerActive]);
 			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 			gameContentPane.add(player1);
-
+			typeButton.setVisible(false);
+			typeButton.setText(getActiveTypeMove(pokemon[PlayerActive]));
+			typeButton.setVisible(true);
+			playerPanel.setVisible(false);
+			playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
+			playerPanel.setBounds(imageWidth, plPokePos, jframeWidth-imageWidth, imageHeight);
+			gameContentPane.add(playerPanel);
+			playerPanel.setVisible(true);
 		}
 	}
 	
