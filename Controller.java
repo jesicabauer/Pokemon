@@ -290,16 +290,21 @@ class Controller implements ActionListener {
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource() == normButton){ // Normal move
 			DamageMessage();
+			System.out.println("Normal button pushed");
 		}else if(event.getSource() == typeButton){ // Type move
 			DamageMessage();
+			System.out.println("type button pushed");
 		}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 			PlayerActive = 0;
+			System.out.println("Switch 1 button pushed");
 			SwitchMessage();
 		}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
 			PlayerActive = 1;
+			System.out.println("Switch 2 button pushed");
 			SwitchMessage();
 		}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
 			PlayerActive = 2;
+			System.out.println("Switch 3 button pushed");
 			SwitchMessage();
 		}
 	}
