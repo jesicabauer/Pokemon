@@ -1,8 +1,6 @@
 package game;
 
 import java.util.Random;
-import java.awt.image.BufferedImage;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 

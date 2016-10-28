@@ -6,17 +6,14 @@ import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 class Controller {
 	
@@ -57,6 +54,11 @@ class Controller {
     public JPanel switchJPanel;
     public JPanel playerPanel;
     public JPanel CPUPanel; 
+    public JButton normButton; 
+    public JButton typeButton; 
+    public JButton switch1Button; 
+    public JButton switch2Button; 
+    public JButton switch3Button; 
     
 	public static Scanner sc;
 	
@@ -84,23 +86,32 @@ class Controller {
     	
     	fightJPanel = new JPanel(); 
     	fightJPanel.setBackground(WHITE);
-    	fightJPanel.setBounds(0,plPokePos+imageWidth,200,180);
-    	fightJPanel.setLayout(new GridLayout(3,1));
-    	fightJPanel.add(new JLabel("Fight", SwingConstants.CENTER));
-    	fightJPanel.add(new JButton("NORMAL MOVE"));
-    	fightJPanel.add(new JButton(getActiveTypeMove(pokemon[0])));
+    	fightJPanel.setBounds(0,plPokePos+imageWidth,385,90);
+    	fightJPanel.setLayout(new GridLayout(1,2));
+    	
+    	normButton = new JButton("NORMAL MOVE");
+    	typeButton = new JButton(getActiveTypeMove(pokemon[0]));
+    	normButton.setBackground(WHITE);
+    	typeButton.setBackground(WHITE);
+    	fightJPanel.add(normButton);
+    	fightJPanel.add(typeButton); 
     	
     	switchJPanel = new JPanel(); 
     	switchJPanel.setBackground(WHITE);
-    	switchJPanel.setBounds(200,plPokePos+imageWidth,185,180);
-    	switchJPanel.setLayout(new GridLayout(2,3));
-    	switchJPanel.add(new JLabel(""));
-    	switchJPanel.add(new JLabel("Switch", SwingConstants.CENTER));
-    	switchJPanel.add(new JLabel(""));
+    	switchJPanel.setBounds(0,plPokePos+imageWidth+90,385,90);
+    	switchJPanel.setLayout(new GridLayout(1,3));
 
-    	switchJPanel.add(new JButton(getButtonSprite(pokemon[0])));
-    	switchJPanel.add(new JButton(getButtonSprite(pokemon[1])));
-    	switchJPanel.add(new JButton(getButtonSprite(pokemon[2])));
+    	switch1Button = new JButton(getButtonSprite(pokemon[0]));
+    	switch2Button = new JButton(getButtonSprite(pokemon[1]));
+    	switch3Button = new JButton(getButtonSprite(pokemon[2]));
+    	switch1Button.setBackground(GREEN);
+    	switch2Button.setBackground(GREEN);
+    	switch3Button.setBackground(GREEN);
+
+    	switchJPanel.add(switch1Button);
+    	switchJPanel.add(switch2Button);
+    	switchJPanel.add(switch3Button); 
+    	
 
 		JLabel player1 = getPlayerSprite(pokemon[0]); 
 		JLabel pc1 = getPCSprite(pokemon[3]); 
@@ -268,6 +279,7 @@ class Controller {
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
+		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
 
 	}
