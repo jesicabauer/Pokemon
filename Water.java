@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -30,12 +32,25 @@ public class Water extends PokemonSuper {
 		return WATER; 
 	}
 	
+	protected String getTypeName() {
+		return "WATER"; 
+	}
+	
 	protected String getName() {
 		return "SQUIRTLE"; 
 	}
 	
 	protected String getMove() {
 		return "AQUA TAIL";
+	}
+	
+	protected String getNormMove() {
+		return "TAIL WHIP"; 
+	}
+	
+	protected Color getColor() {
+		Color color = Color.decode("#6890f0");
+		return color; 
 	}
 
 }

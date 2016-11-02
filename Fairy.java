@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -30,12 +32,25 @@ public class Fairy extends PokemonSuper {
 		return FAIRY; 
 	}
 	
+	protected String getTypeName() {
+		return "FAIRY"; 
+	}
+	
 	protected String getName() {
 		return "JIGGLYPUFF"; 
 	}
 	
 	protected String getMove() {
 		return "SING";
+	}
+	
+	protected String getNormMove() {
+		return "POUND"; 
+	}
+	
+	protected Color getColor() {
+		Color color = Color.decode("#ffaec9");
+		return color; 
 	}
 	
 }

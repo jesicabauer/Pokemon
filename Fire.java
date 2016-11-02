@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -30,12 +32,25 @@ public class Fire extends PokemonSuper {
 		return FIRE; 
 	}
 	
+	protected String getTypeName() {
+		return "FIRE"; 
+	}
+	
 	protected String getName() {
 		return "CHARMANDER"; 
 	}
 	
 	protected String getMove() {
 		return "FIRE FANG";
+	}
+	
+	protected String getNormMove() {
+		return "SCRATCH"; 
+	}
+	
+	protected Color getColor() {
+		Color color = Color.decode("#f08030");
+		return color; 
 	}
 
 }

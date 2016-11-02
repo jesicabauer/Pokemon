@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -30,11 +32,24 @@ public class Grass extends PokemonSuper {
 		return GRASS; 
 	}
 	
+	protected String getTypeName() {
+		return "GRASS"; 
+	}
+	
 	protected String getName() {
 		return "BULBASAUR"; 
 	}
 	
 	protected String getMove() {
 		return "VINE WHIP";
+	}
+	
+	protected String getNormMove() {
+		return "TACKLE"; 
+	}
+	
+	protected Color getColor() {
+		Color color = Color.decode("#78c850");
+		return color; 
 	}
 }

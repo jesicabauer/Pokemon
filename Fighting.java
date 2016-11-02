@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -30,12 +32,25 @@ public class Fighting  extends PokemonSuper {
 		return FIGHTING; 
 	}
 	
+	protected String getTypeName() {
+		return "FIGHTING"; 
+	}
+	
 	protected String getName() {
 		return "MANKEY"; 
 	}
 	
 	protected String getMove() {
-		return "SEISMIC TOSS";
+		return "KARATE CHOP";
+	}
+	
+	protected String getNormMove() {
+		return "TAKE DOWN"; 
+	}
+	
+	protected Color getColor() {
+		Color color = Color.decode("#c03028");
+		return color; 
 	}
 
 }

@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -31,12 +33,25 @@ public class Electric extends PokemonSuper {
 		return ELECTRIC; 
 	}
 	
+	protected String getTypeName() {
+		return "ELECTRIC"; 
+	}
+	
 	protected String getName() {
 		return "PIKACHU"; 
 	}
 	
 	protected String getMove() {
 		return "THUNDERSHOCK";
+	}
+	
+	protected String getNormMove() {
+		return "QUICK ATTACK"; 
+	}
+	
+	protected Color getColor() {
+		Color color = Color.decode("#f8d030");
+		return color; 
 	}
 
 }

@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -20,13 +21,10 @@ class PokemonSuper {
 
 	// get type, get name, get moves
 	
-//	protected void normMoves() {
-//		
-//		Random rand = new Random(); 
-//		int n = rand.nextInt(4);
-//		System.out.println(n); 
-//		 
-//	}
+	protected String getNormMove() {
+	
+		return ""; 
+	}
 	
 	protected JLabel getPlayerSprite() {
 
@@ -62,6 +60,10 @@ class PokemonSuper {
 	
 	protected String getMove() {
 		return "";
+	}
+	
+	protected Color getColor() {
+		return Color.decode("#ffffff"); 
 	}
 	
 	protected int damage() {
