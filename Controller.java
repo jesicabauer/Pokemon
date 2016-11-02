@@ -48,7 +48,7 @@ class Controller implements ActionListener {
 	
 	public static double attackEfficiency[][] = new double[NUM_OF_TYPES][NUM_OF_TYPES]; 
 	public static int pokemon[] = new int[NUM_OF_POKEMON];
-	public static int pokemonHealth[] = new int[NUM_OF_POKEMON];
+	public static double pokemonHealth[] = new double[NUM_OF_POKEMON];
 	public static JLabel getSprite[] = new JLabel[NUM_OF_TYPES];
 	public static ImageIcon getButtonSprite[] = new ImageIcon[NUM_OF_TYPES];
 	public static String getMove[] = new String[NUM_OF_TYPES];
@@ -88,6 +88,7 @@ class Controller implements ActionListener {
     
 	protected int PlayerActive = 0;
 	protected int CPUActive = 3;
+	protected boolean isNormalMove; 
 	
     public Controller()  {
     	
@@ -313,9 +314,9 @@ class Controller implements ActionListener {
 		for (int i = 0; i < NUM_OF_TYPES; i++) {
 			for (int j = 0; j < NUM_OF_TYPES; j++) {
 				attackEfficiency[i][j] = Double.parseDouble(sc.next()); 
-//				System.out.print(attackEfficiency[i][j] + " ");
+				System.out.print(attackEfficiency[i][j] + " ");
 			}
-//			System.out.println();
+			System.out.println();
 		} 
 	}
 	
@@ -354,21 +355,46 @@ class Controller implements ActionListener {
 	}
 	
 
-	private JPanel CreateIDBoxes(int Pokemon, int PokemonDamage){
+	private JPanel CreateIDBoxes(int Pokemon, double pokemonHealth){
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new GridLayout(2,1));
 		JLabel PokemonName = new JLabel("<html><font size=5>" + whichPokemon(Pokemon) + "</font></html>", SwingConstants.CENTER);
-		JLabel Health = new JLabel("<html>(" + getTypeName(Pokemon) + ") <font size=4>" + PokemonDamage+"/" + MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
+		JLabel Health = new JLabel("<html>(" + getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
 		
 		myPanel.add(PokemonName);
 		myPanel.add(Health);
 		return myPanel;
 	}
+
+
+	protected void DamageMessage(){
+		userMessageLabel.setVisible(false);
+		if (!isNormalMove) {		
+			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + getMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + CPUPokemonHit() +"</html>");
 		
-	protected JLabel DamageMessage(){
-		String Damage = "You did "+ "(create getDamage method) damage to "+whichPokemon(pokemon[CPUActive]);
-		JLabel myLabel = new JLabel(Damage);
-		return myLabel;
+		} else {
+			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + getNormMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + CPUPokemonHit()+ "</html>");
+		}
+		CPUPokemonHit();
+		userMessageLabel.setVisible(true);
+	}
+	
+	protected String effectiveness() {
+		double efficiency; 
+		if (!isNormalMove) {
+			efficiency = attackEfficiency[pokemon[PlayerActive]][pokemon[CPUActive]];
+		} else {
+			efficiency = attackEfficiency[NORMAL][pokemon[CPUActive]];
+		}
+		String message = ""; 
+		if (efficiency == 2.0) {
+			message = "It's SUPER EFFECTIVE!";
+		} else if (efficiency == 0.5) {
+			message = "It's NOT VERY EFFECTIVE...";
+		} 
+//		System.out.println(attackEfficiency[pokemon[PlayerActive]][pokemon[CPUActive]]);
+//		System.out.println(message);
+		return message; 
 	}
 	
 	protected void SwitchMessage(){
@@ -379,16 +405,12 @@ class Controller implements ActionListener {
 	
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource() == normButton){ // Normal move
+			isNormalMove = true; 
 			DamageMessage();
-			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("Normal Button Pushed");
-			userMessageLabel.setVisible(true);
 			
 		}else if(event.getSource() == typeButton){ // Type move
+			isNormalMove = false; 
 			DamageMessage();
-			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("Type Button Pushed");
-			userMessageLabel.setVisible(true);
 		}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 			PlayerActive = 0;
 			switchPokemon();
@@ -424,15 +446,33 @@ class Controller implements ActionListener {
 	}
 	
 	protected void UserPokemonHit(){
-		getDamage();
-		
-		pokemonHealth[PlayerActive] = pokemonHealth[PlayerActive] - damageDone ;
+		double damageDone = getDamage();
+		double efficiency; 
+		if (!isNormalMove) {
+			efficiency = attackEfficiency[pokemon[CPUActive]][pokemon[PlayerActive]];
+		} else {
+			efficiency = attackEfficiency[CPUActive][NORMAL];
+		}
+		pokemonHealth[PlayerActive] -= damageDone*efficiency ;
 	}
 	
+	
+	protected String CPUPokemonHit(){
+		double damageDone = getDamage();
+		double efficiency; 
+		if (!isNormalMove) {
+			efficiency = attackEfficiency[pokemon[PlayerActive]][pokemon[CPUActive]];
+		} else {
+			efficiency = attackEfficiency[NORMAL][pokemon[CPUActive]];
+		}
+		pokemonHealth[CPUActive] -= damageDone*efficiency;
+		return " (-"+damageDone*efficiency+")";
+	}
 	
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
+		typeMatrix(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
 
