@@ -55,6 +55,7 @@ class Controller implements ActionListener {
 	public static String getNormMove[] = new String[NUM_OF_TYPES];
 	public static String getTypeName[] = new String[NUM_OF_TYPES];
 	public static Color getColor[] = new Color[NUM_OF_TYPES];
+	public static int getDamage[] = new int[NUM_OF_TYPES];
 	
     public JFrame gameJFrame;
     public Container gameContentPane;
@@ -190,6 +191,21 @@ class Controller implements ActionListener {
 		}
 		return "Oh no";
 	}
+	
+	protected String getType(int i){
+		switch(i){
+		case 0: return "Normal";
+		case 1: return "fire";
+		case 2: return "water";
+		case 3: return "electric";
+		case 4: return "grass";
+		case 5: return "fighting";
+		case 6: return "psychic";
+		case 7: return "steel";
+		case 8: return "fairy";
+	}
+	return "Oh no";
+	}
     
     private JLabel getPlayerSprite(int i) {
     	getSprite[NORMAL] = null; 
@@ -287,7 +303,9 @@ class Controller implements ActionListener {
     	
     	return getColor[i]; 
     }
-    
+    private int getDamage() { 
+    	return game.getDamage(); 
+    }
 
 	
 	public static void typeMatrix() throws FileNotFoundException {
@@ -346,9 +364,6 @@ class Controller implements ActionListener {
 		myPanel.add(Health);
 		return myPanel;
 	}
-
-	
-
 		
 	protected JLabel DamageMessage(){
 		String Damage = "You did "+ "(create getDamage method) damage to "+whichPokemon(pokemon[CPUActive]);
@@ -407,6 +422,14 @@ class Controller implements ActionListener {
 		gameContentPane.add(playerPanel);
 		playerPanel.setVisible(true);
 	}
+	
+	protected void UserPokemonHit(){
+		getDamage();
+		
+		pokemonHealth[PlayerActive] = pokemonHealth[PlayerActive] - damageDone ;
+	}
+	
+	
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		

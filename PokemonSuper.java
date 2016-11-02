@@ -71,7 +71,7 @@ class PokemonSuper {
 	}
 	protected int getDamage(){
 		Random myRand = new Random();
-		int damage = myRand.nextInt(10)+10;
+		int damage = myRand.nextInt(10)+MIN_HIT;
 		return damage;
 		//Hi
 	}
