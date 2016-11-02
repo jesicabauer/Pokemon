@@ -87,6 +87,7 @@ class Controller implements ActionListener {
     
 	protected int PlayerActive = 0;
 	protected int CPUActive = 3;
+	protected boolean isNormalMove; 
 	
     public Controller()  {
     	
@@ -295,9 +296,9 @@ class Controller implements ActionListener {
 		for (int i = 0; i < NUM_OF_TYPES; i++) {
 			for (int j = 0; j < NUM_OF_TYPES; j++) {
 				attackEfficiency[i][j] = Double.parseDouble(sc.next()); 
-//				System.out.print(attackEfficiency[i][j] + " ");
+				System.out.print(attackEfficiency[i][j] + " ");
 			}
-//			System.out.println();
+			System.out.println();
 		} 
 	}
 	
@@ -347,13 +348,34 @@ class Controller implements ActionListener {
 		return myPanel;
 	}
 
-	
-
+	protected void DamageMessage(){
+		userMessageLabel.setVisible(false);
+		if (!isNormalMove) {
 		
-	protected JLabel DamageMessage(){
-		String Damage = "You did "+ "(create getDamage method) damage to "+whichPokemon(pokemon[CPUActive]);
-		JLabel myLabel = new JLabel(Damage);
-		return myLabel;
+			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + getMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + "</html>");
+		
+		} else {
+			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + getNormMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + "</html>");
+		}
+		userMessageLabel.setVisible(true);
+	}
+	
+	protected String effectiveness() {
+		double efficiency; 
+		if (!isNormalMove) {
+			efficiency = attackEfficiency[pokemon[PlayerActive]][pokemon[CPUActive]];
+		} else {
+			efficiency = attackEfficiency[NORMAL][pokemon[CPUActive]];
+		}
+		String message = ""; 
+		if (efficiency == 2.0) {
+			message = "It's SUPER EFFECTIVE!";
+		} else if (efficiency == 0.5) {
+			message = "It's NOT VERY EFFECTIVE...";
+		} 
+//		System.out.println(attackEfficiency[pokemon[PlayerActive]][pokemon[CPUActive]]);
+//		System.out.println(message);
+		return message; 
 	}
 	
 	protected void SwitchMessage(){
@@ -364,16 +386,12 @@ class Controller implements ActionListener {
 	
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource() == normButton){ // Normal move
+			isNormalMove = true; 
 			DamageMessage();
-			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("Normal Button Pushed");
-			userMessageLabel.setVisible(true);
 			
 		}else if(event.getSource() == typeButton){ // Type move
+			isNormalMove = false; 
 			DamageMessage();
-			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("Type Button Pushed");
-			userMessageLabel.setVisible(true);
 		}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 			PlayerActive = 0;
 			switchPokemon();
@@ -410,6 +428,7 @@ class Controller implements ActionListener {
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
+		typeMatrix(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
 
