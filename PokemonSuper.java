@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-class PokemonSuper {
+class PokemonSuper { // super class for the pokemon types
 	
 	public final static int NUM_NORM_MOVES = 4; 
 	public final static int NORMAL = 0; 

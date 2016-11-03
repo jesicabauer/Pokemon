@@ -339,7 +339,7 @@ class Controller implements ActionListener {
 //		System.out.println();
 	}
 	
-	private void playerPokemon() {
+	private void playerPokemon() { // assigns the player's pokemon
 		System.out.println("Your Pokemon are: ");
 		for (int i = 0; i < ASSIGNED_POKEMON; i++ ) {
 			System.out.println(whichPokemon(pokemon[i]));
@@ -347,7 +347,7 @@ class Controller implements ActionListener {
 		
 	}
 	
-	private void CPUPokemon() {
+	private void CPUPokemon() { // randomly assigns the cpu pokemon
 		System.out.println("The CPU's Pokemon are: "); 
 		for (int i = ASSIGNED_POKEMON; i < ASSIGNED_POKEMON*2; i++ ) {
 			System.out.println(whichPokemon(pokemon[i]));
@@ -355,7 +355,7 @@ class Controller implements ActionListener {
 	}
 	
 
-	private JPanel CreateIDBoxes(int Pokemon, double pokemonHealth){
+	private JPanel CreateIDBoxes(int Pokemon, double pokemonHealth){ // creates the health boxes
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new GridLayout(2,1));
 		JLabel PokemonName = new JLabel("<html><font size=5>" + whichPokemon(Pokemon) + "</font></html>", SwingConstants.CENTER);
@@ -367,7 +367,7 @@ class Controller implements ActionListener {
 	}
 
 
-	protected void DamageMessage(){
+	protected void DamageMessage(){ // message when a pokemon is damaged
 		userMessageLabel.setVisible(false);
 		if (!isNormalMove) {		
 			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + getMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + CPUPokemonHit() +"</html>");
@@ -379,7 +379,7 @@ class Controller implements ActionListener {
 		userMessageLabel.setVisible(true);
 	}
 	
-	protected String effectiveness() {
+	protected String effectiveness() { // returns how effective an attack is
 		double efficiency; 
 		if (!isNormalMove) {
 			efficiency = attackEfficiency[pokemon[PlayerActive]][pokemon[CPUActive]];
@@ -397,13 +397,13 @@ class Controller implements ActionListener {
 		return message; 
 	}
 	
-	protected void SwitchMessage(){
+	protected void SwitchMessage(){ // message that appears when the player chooses to change their pokemon
 		userMessageLabel.setVisible(false);
 		userMessageLabel.setText("You switched to "+whichPokemon(pokemon[PlayerActive])+"!");
 		userMessageLabel.setVisible(true);	
 	}
 	
-	public void actionPerformed(ActionEvent event){
+	public void actionPerformed(ActionEvent event){ // button pressed
 		if(event.getSource() == normButton){ // Normal move
 			isNormalMove = true; 
 			DamageMessage();
@@ -424,7 +424,7 @@ class Controller implements ActionListener {
 		}
 	}
 	
-	protected void switchPokemon() {
+	protected void switchPokemon() { // Code to switch the graphics when the pokemon changes 
 		SwitchMessage(); 
 		player1.setVisible(false); 
 		player1 = getPlayerSprite(pokemon[PlayerActive]);
@@ -445,7 +445,7 @@ class Controller implements ActionListener {
 		playerPanel.setVisible(true);
 	}
 	
-	protected void UserPokemonHit(){
+	protected void UserPokemonHit(){ // When the cpu attacks the player
 		double damageDone = getDamage();
 		double efficiency; 
 		if (!isNormalMove) {
@@ -457,7 +457,7 @@ class Controller implements ActionListener {
 	}
 	
 	
-	protected String CPUPokemonHit(){
+	protected String CPUPokemonHit(){ //Runs when the player chooses to attack the cpu
 		double damageDone = getDamage();
 		double efficiency; 
 		if (!isNormalMove) {
