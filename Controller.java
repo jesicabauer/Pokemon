@@ -37,6 +37,7 @@ class Controller implements ActionListener {
 	public final static int MAX_HEALTH = 50; 
 	
 	PokemonSuper game = new PokemonSuper();
+	InstantiateArrays myArrays = new InstantiateArrays();
 	Fire fire = new Fire(); 
 	Water water = new Water();
 	Electric electric = new Electric(); 
@@ -110,8 +111,8 @@ class Controller implements ActionListener {
     	fightJPanel.setBounds(0,plPokePos+imageWidth,385,90);
     	fightJPanel.setLayout(new GridLayout(1,2));
     	
-    	normButton = new JButton("<html><center>" + getNormMove(pokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
-    	typeButton = new JButton("<html><center>" + getMove(pokemon[PlayerActive]) + "<br><font size=1>(" + getTypeName(pokemon[PlayerActive]) + ")</font></center></html>");
+    	normButton = new JButton("<html><center>" + myArrays.getNormMove(pokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
+    	typeButton = new JButton("<html><center>" + myArrays.getMove(pokemon[PlayerActive]) + "<br><font size=1>(" + myArrays.getTypeName(pokemon[PlayerActive]) + ")</font></center></html>");
     	normButton.addActionListener(this);
     	typeButton.addActionListener(this);
     	normButton.setBackground(WHITE);
@@ -124,23 +125,23 @@ class Controller implements ActionListener {
     	switchJPanel.setBounds(0,plPokePos+imageWidth+90,385,90);
     	switchJPanel.setLayout(new GridLayout(1,3));
 
-    	switch1Button = new JButton(getButtonSprite(pokemon[0]));
-    	switch2Button = new JButton(getButtonSprite(pokemon[1]));
-    	switch3Button = new JButton(getButtonSprite(pokemon[2]));
+    	switch1Button = new JButton(myArrays.getButtonSprite(pokemon[0]));
+    	switch2Button = new JButton(myArrays.getButtonSprite(pokemon[1]));
+    	switch3Button = new JButton(myArrays.getButtonSprite(pokemon[2]));
     	switch1Button.addActionListener(this);
     	switch2Button.addActionListener(this);
     	switch3Button.addActionListener(this);
-    	switch1Button.setBackground(getColor(pokemon[0]));
-    	switch2Button.setBackground(getColor(pokemon[1]));
-    	switch3Button.setBackground(getColor(pokemon[2]));
+    	switch1Button.setBackground(myArrays.getColor(pokemon[0]));
+    	switch2Button.setBackground(myArrays.getColor(pokemon[1]));
+    	switch3Button.setBackground(myArrays.getColor(pokemon[2]));
 
     	switchJPanel.add(switch1Button);
     	switchJPanel.add(switch2Button);
     	switchJPanel.add(switch3Button); 
     	
 
-		player1 = getPlayerSprite(pokemon[PlayerActive]); 
-		pc1 = getPCSprite(pokemon[CPUActive]); 
+		player1 = myArrays.getPlayerSprite(pokemon[PlayerActive]); 
+		pc1 = myArrays.getPCSprite(pokemon[CPUActive]); 
 		player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 		pc1.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
 		
@@ -152,11 +153,11 @@ class Controller implements ActionListener {
 		playerPanel = CreateIDBoxes(pokemon[PlayerActive],pokemonHealth[PlayerActive]);
 		CPUPanel = CreateIDBoxes(pokemon[CPUActive],pokemonHealth[PlayerActive]);		
 		playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
-		playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,getColor(pokemon[PlayerActive])));
+		playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(pokemon[PlayerActive])));
 		playerPanel.setBackground(WHITE);
 		CPUPanel.setBounds(20,20, jframeWidth - imageWidth*2, 50);
 		CPUPanel.setBorder(BorderFactory.createMatteBorder(
-				matteTop, matteBottom, matteTop, matteBottom, getColor(pokemon[CPUActive])));
+				matteTop, matteBottom, matteTop, matteBottom, myArrays.getColor(pokemon[CPUActive])));
 		CPUPanel.setBackground(WHITE);
 		
 		userMessagePanel = new JPanel(); 
@@ -193,122 +194,8 @@ class Controller implements ActionListener {
 		return "Oh no";
 	}
 	
-	protected String getType(int i){
-		switch(i){
-		case 0: return "Normal";
-		case 1: return "fire";
-		case 2: return "water";
-		case 3: return "electric";
-		case 4: return "grass";
-		case 5: return "fighting";
-		case 6: return "psychic";
-		case 7: return "steel";
-		case 8: return "fairy";
-	}
-	return "Oh no";
-	}
     
-    private JLabel getPlayerSprite(int i) {
-    	getSprite[NORMAL] = null; 
-    	getSprite[FIRE] = fire.getPlayerSprite(); 
-    	getSprite[WATER] = water.getPlayerSprite(); 
-    	getSprite[ELECTRIC] = electric.getPlayerSprite(); 
-    	getSprite[GRASS] = grass.getPlayerSprite(); 
-    	getSprite[FIGHTING] = fighting.getPlayerSprite(); 
-    	getSprite[PSYCHIC] = psychic.getPlayerSprite(); 
-    	getSprite[STEEL] = steel.getPlayerSprite(); 
-    	getSprite[FAIRY] = fairy.getPlayerSprite(); 
-    	
-    	return getSprite[i]; 
-    }
-    
-    private JLabel getPCSprite(int i) {
-    	getSprite[NORMAL] = null; 
-    	getSprite[FIRE] = fire.getPCSprite(); 
-    	getSprite[WATER] = water.getPCSprite(); 
-    	getSprite[ELECTRIC] = electric.getPCSprite(); 
-    	getSprite[GRASS] = grass.getPCSprite(); 
-    	getSprite[FIGHTING] = fighting.getPCSprite(); 
-    	getSprite[PSYCHIC] = psychic.getPCSprite(); 
-    	getSprite[STEEL] = steel.getPCSprite(); 
-    	getSprite[FAIRY] = fairy.getPCSprite(); 
-    	
-    	return getSprite[i]; 
-    }
-    
-    private ImageIcon getButtonSprite(int i){
-    	getButtonSprite[FIRE] = fire.getButtonSprite(); 
-    	getButtonSprite[WATER] = water.getButtonSprite(); 
-    	getButtonSprite[ELECTRIC] = electric.getButtonSprite(); 
-    	getButtonSprite[GRASS] = grass.getButtonSprite(); 
-    	getButtonSprite[FIGHTING] = fighting.getButtonSprite(); 
-    	getButtonSprite[PSYCHIC] = psychic.getButtonSprite(); 
-    	getButtonSprite[STEEL] = steel.getButtonSprite(); 
-    	getButtonSprite[FAIRY] = fairy.getButtonSprite();
-    	
-    	return getButtonSprite[i];
-    }
-
-    private String getNormMove(int i) {
-    	getNormMove[NORMAL] = null; 
-    	getNormMove[FIRE] = fire.getNormMove(); 
-    	getNormMove[WATER] = water.getNormMove(); 
-    	getNormMove[ELECTRIC] = electric.getNormMove(); 
-    	getNormMove[GRASS] = grass.getNormMove(); 
-    	getNormMove[FIGHTING] = fighting.getNormMove(); 
-    	getNormMove[PSYCHIC] = psychic.getNormMove(); 
-    	getNormMove[STEEL] = steel.getNormMove(); 
-    	getNormMove[FAIRY] = fairy.getNormMove(); 
-    	
-    	return getNormMove[i]; 
-    }
-    
-    private String getMove(int i) {
-    	getMove[NORMAL] = null; 
-    	getMove[FIRE] = fire.getMove(); 
-    	getMove[WATER] = water.getMove(); 
-    	getMove[ELECTRIC] = electric.getMove(); 
-    	getMove[GRASS] = grass.getMove(); 
-    	getMove[FIGHTING] = fighting.getMove(); 
-    	getMove[PSYCHIC] = psychic.getMove(); 
-    	getMove[STEEL] = steel.getMove(); 
-    	getMove[FAIRY] = fairy.getMove(); 
-    	
-    	return getMove[i]; 
-    }
-    
-    private String getTypeName(int i) {
-    	getTypeName[NORMAL] = null; 
-    	getTypeName[FIRE] = fire.getTypeName(); 
-    	getTypeName[WATER] = water.getTypeName(); 
-    	getTypeName[ELECTRIC] = electric.getTypeName(); 
-    	getTypeName[GRASS] = grass.getTypeName(); 
-    	getTypeName[FIGHTING] = fighting.getTypeName(); 
-    	getTypeName[PSYCHIC] = psychic.getTypeName(); 
-    	getTypeName[STEEL] = steel.getTypeName(); 
-    	getTypeName[FAIRY] = fairy.getTypeName(); 
-    	
-    	return getTypeName[i]; 
-    }
-    
-    private Color getColor(int i) {
-    	getColor[NORMAL] = null; 
-    	getColor[FIRE] = fire.getColor(); 
-    	getColor[WATER] = water.getColor(); 
-    	getColor[ELECTRIC] = electric.getColor(); 
-    	getColor[GRASS] = grass.getColor(); 
-    	getColor[FIGHTING] = fighting.getColor(); 
-    	getColor[PSYCHIC] = psychic.getColor(); 
-    	getColor[STEEL] = steel.getColor(); 
-    	getColor[FAIRY] = fairy.getColor(); 
-    	
-    	return getColor[i]; 
-    }
-    private int getDamage() { 
-    	return game.getDamage(); 
-    }
-
-	
+       	
 	public static void typeMatrix() throws FileNotFoundException {
 		sc = new Scanner(new File("type-matrix.txt"));
 		for (int i = 0; i < NUM_OF_TYPES; i++) {
@@ -359,23 +246,37 @@ class Controller implements ActionListener {
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new GridLayout(2,1));
 		JLabel PokemonName = new JLabel("<html><font size=5>" + whichPokemon(Pokemon) + "</font></html>", SwingConstants.CENTER);
-		JLabel Health = new JLabel("<html>(" + getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
+		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
 		
 		myPanel.add(PokemonName);
 		myPanel.add(Health);
 		return myPanel;
+	}
+	
+	protected void IsPokemonDead(int i){
+		if (pokemonHealth[i]<0){
+			pokemonHealth[i]=0;
+			if (PlayerActive == i){
+				PlayerActive++; // this needs to be mod 3
+			}else{
+				CPUActive++;//Also mod 3+2
+			}
+			
+		};
+			
 	}
 
 
 	protected void DamageMessage(){ // message when a pokemon is damaged
 		userMessageLabel.setVisible(false);
 		if (!isNormalMove) {		
-			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + getMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + CPUPokemonHit() +"</html>");
+			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + myArrays.getMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + CPUPokemonHit() +"</html>");
 		
 		} else {
-			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + getNormMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + CPUPokemonHit()+ "</html>");
+			userMessageLabel.setText("<html>" + whichPokemon(pokemon[PlayerActive])+" used " + myArrays.getNormMove(pokemon[PlayerActive]) + ". <br>" + effectiveness() + CPUPokemonHit()+ "</html>");
 		}
-		CPUPokemonHit();
+		System.out.println(pokemon[CPUActive]+ " has "+ pokemonHealth[CPUActive]);
+		UpdateHealth();
 		userMessageLabel.setVisible(true);
 	}
 	
@@ -407,10 +308,11 @@ class Controller implements ActionListener {
 		if(event.getSource() == normButton){ // Normal move
 			isNormalMove = true; 
 			DamageMessage();
-			
+			UpdateHealth();
 		}else if(event.getSource() == typeButton){ // Type move
 			isNormalMove = false; 
 			DamageMessage();
+			UpdateHealth();
 		}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 			PlayerActive = 0;
 			switchPokemon();
@@ -427,26 +329,46 @@ class Controller implements ActionListener {
 	protected void switchPokemon() { // Code to switch the graphics when the pokemon changes 
 		SwitchMessage(); 
 		player1.setVisible(false); 
-		player1 = getPlayerSprite(pokemon[PlayerActive]);
+		player1 = myArrays.getPlayerSprite(pokemon[PlayerActive]);
 		player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 		gameContentPane.add(player1);
 		typeButton.setVisible(false);
-		typeButton.setText("<html><center>" + getMove(pokemon[PlayerActive]) + "<br><font size=1>(" + getTypeName(pokemon[PlayerActive]) + ")</font></center></html>");
+		typeButton.setText("<html><center>" + myArrays.getMove(pokemon[PlayerActive]) + "<br><font size=1>(" + myArrays.getTypeName(pokemon[PlayerActive]) + ")</font></center></html>");
 		typeButton.setVisible(true);
 		normButton.setVisible(false);
-		normButton.setText("<html><center>" + getNormMove(pokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
+		normButton.setText("<html><center>" + myArrays.getNormMove(pokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
 		normButton.setVisible(true);
 		playerPanel.setVisible(false);
 		playerPanel = CreateIDBoxes(pokemon[PlayerActive],50);
 		playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
 		playerPanel.setBackground(WHITE);
-		playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,getColor(pokemon[PlayerActive])));
+		playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(pokemon[PlayerActive])));
 		gameContentPane.add(playerPanel);
 		playerPanel.setVisible(true);
 	}
 	
+	protected void UpdateHealth(){
+		playerPanel.setVisible(false);
+		CPUPanel.setVisible(false);
+		playerPanel = CreateIDBoxes(pokemon[PlayerActive],pokemonHealth[PlayerActive]);
+		CPUPanel = CreateIDBoxes(pokemon[CPUActive],pokemonHealth[CPUActive]);		
+		playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
+		playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(pokemon[PlayerActive])));
+		playerPanel.setBackground(WHITE);
+		CPUPanel.setBounds(20,20, jframeWidth - imageWidth*2, 50);
+		CPUPanel.setBorder(BorderFactory.createMatteBorder(
+				matteTop, matteBottom, matteTop, matteBottom, myArrays.getColor(pokemon[CPUActive])));
+		CPUPanel.setBackground(WHITE);
+
+		
+		gameContentPane.add(playerPanel);
+		gameContentPane.add(CPUPanel);
+		CPUPanel.setVisible(true);
+		playerPanel.setVisible(true);		
+	}
+	
 	protected void UserPokemonHit(){ // When the cpu attacks the player
-		double damageDone = getDamage();
+		double damageDone = game.getDamage();
 		double efficiency; 
 		if (!isNormalMove) {
 			efficiency = attackEfficiency[pokemon[CPUActive]][pokemon[PlayerActive]];
@@ -458,7 +380,7 @@ class Controller implements ActionListener {
 	
 	
 	protected String CPUPokemonHit(){ //Runs when the player chooses to attack the cpu
-		double damageDone = getDamage();
+		double damageDone = game.getDamage();
 		double efficiency; 
 		if (!isNormalMove) {
 			efficiency = attackEfficiency[pokemon[PlayerActive]][pokemon[CPUActive]];
@@ -473,6 +395,7 @@ class Controller implements ActionListener {
 	public static void main(String[] args) throws FileNotFoundException  {
 		
 		typeMatrix(); 
+		InstantiateArrays myArrays = new InstantiateArrays(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
 
