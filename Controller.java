@@ -366,38 +366,40 @@ class Controller implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent event){ // button pressed
-		if(event.getSource() == normButton){ // Normal move
-			isNormalMove = true; 
-			DamageMessage();
-			UpdateHealth();
-			if (isPlayerTurn) {
-				isPokemonFainted(CPUActive);
-			} else {
-				isPokemonFainted(PlayerActive);
+		if(isPlayerTurn) {
+			if(event.getSource() == normButton){ // Normal move
+				isNormalMove = true; 
+				DamageMessage();
+				UpdateHealth();
+				if (isPlayerTurn) {
+					isPokemonFainted(CPUActive);
+				} else {
+					isPokemonFainted(PlayerActive);
+				}
+				isAllDead(); 
+				
+			}else if(event.getSource() == typeButton){ // Type move
+				isNormalMove = false; 
+				DamageMessage();
+				UpdateHealth();
+				if (isPlayerTurn) {
+					isPokemonFainted(CPUActive);
+				} else {
+					isPokemonFainted(PlayerActive);
+				}
+				isAllDead(); 
+				
+			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
+				PlayerActive = 0;
+				switchPokemon();
+			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
+				PlayerActive = 1;
+				switchPokemon();
+			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
+				PlayerActive = 2;
+				switchPokemon();
+	
 			}
-			isAllDead(); 
-			
-		}else if(event.getSource() == typeButton){ // Type move
-			isNormalMove = false; 
-			DamageMessage();
-			UpdateHealth();
-			if (isPlayerTurn) {
-				isPokemonFainted(CPUActive);
-			} else {
-				isPokemonFainted(PlayerActive);
-			}
-			isAllDead(); 
-			
-		}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
-			PlayerActive = 0;
-			switchPokemon();
-		}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
-			PlayerActive = 1;
-			switchPokemon();
-		}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
-			PlayerActive = 2;
-			switchPokemon();
-
 		}
 	}
 	
