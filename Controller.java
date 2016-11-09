@@ -46,6 +46,7 @@ class Controller implements ActionListener {
 	Psychic psychic = new Psychic(); 
 	Steel steel = new Steel(); 
 	Fairy fairy = new Fairy();
+	CPUaction cpu = new CPUaction(); 
 	
 	public static double attackEfficiency[][] = new double[NUM_OF_TYPES][NUM_OF_TYPES]; 
 	
@@ -278,17 +279,23 @@ class Controller implements ActionListener {
 			if (cpuHealth[i] <= 0) {
 				cpuHealth[i] = 0;
 				isCPUDead[i] = true; 
-				System.out.println(whichPokemon(cpuPokemon[i]) + " fainted!");
-				int pokemonAct = CPUActive%3;
-				CPUActive = ++pokemonAct; 
+//				System.out.println(whichPokemon(cpuPokemon[i]) + " fainted!");
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText(whichPokemon(cpuPokemon[i]) + " fainted!");
+				userMessageLabel.setVisible(true);
+				int pokemonAct = ++CPUActive;
+				CPUActive = pokemonAct%3; 
 			} 
 		} else {
 			if (playerHealth[i] <= 0) {
 				playerHealth[i] = 0;
 				isPlayerDead[i] = true;
-				System.out.println(whichPokemon(playerPokemon[i]) + " fainted!");
-				int pokemonAct = PlayerActive%3;
-				PlayerActive = ++pokemonAct; 
+//				System.out.println(whichPokemon(playerPokemon[i]) + " fainted!");
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText(whichPokemon(playerPokemon[i]) + " fainted!");
+				userMessageLabel.setVisible(true);
+				int pokemonAct = ++PlayerActive;
+				PlayerActive = pokemonAct%3; 
 			}
 		}
 			
@@ -304,7 +311,10 @@ class Controller implements ActionListener {
 			}
 			
 			if (didIWin) {
-				System.out.println("Player defeated! You won!");
+//				System.out.println("Player defeated! You won!");
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("Player defeated! You won!");
+				userMessageLabel.setVisible(true);
 			}
 		} else {
 			didILose = true;
@@ -314,7 +324,10 @@ class Controller implements ActionListener {
 				}
 			}
 			if (didILose) {
-				System.out.println("You have been defeated! You lost!");
+//				System.out.println("You have been defeated! You lost!");
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("You have been defeated! You lost!");
+				userMessageLabel.setVisible(true);
 			}
 		}
 	}
@@ -333,9 +346,10 @@ class Controller implements ActionListener {
 		} else {
 			if (!isNormalMove) {		
 				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[CPUActive])+" used " + myArrays.getMove(cpuPokemon[CPUActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
-			
+//				System.out.println("CPU used a type move!");
 			} else {
 				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[CPUActive])+" used " + myArrays.getNormMove(cpuPokemon[CPUActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
+//				System.out.println("CPU used a normal move!");
 			}
 			userMessageLabel.setVisible(true);
 		} 
@@ -377,7 +391,7 @@ class Controller implements ActionListener {
 					isPokemonFainted(PlayerActive);
 				}
 				isAllDead(); 
-				
+				cpuTurn(); 
 			}else if(event.getSource() == typeButton){ // Type move
 				isNormalMove = false; 
 				DamageMessage();
@@ -388,17 +402,19 @@ class Controller implements ActionListener {
 					isPokemonFainted(PlayerActive);
 				}
 				isAllDead(); 
-				
+				cpuTurn(); 
 			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 				PlayerActive = 0;
 				switchPokemon();
+				cpuTurn(); 
 			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
 				PlayerActive = 1;
 				switchPokemon();
+				cpuTurn(); 
 			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
 				PlayerActive = 2;
 				switchPokemon();
-	
+				cpuTurn(); 
 			}
 		}
 	}
@@ -468,7 +484,7 @@ class Controller implements ActionListener {
 			pc1.setVisible(true);
 		} else {
 			player1.setVisible(false);
-			player1 = myArrays.getPCSprite(playerPokemon[PlayerActive]); 
+			player1 = myArrays.getPlayerSprite(playerPokemon[PlayerActive]); 
 			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
 			gameContentPane.add(player1);
 			player1.setVisible(true);
@@ -493,11 +509,25 @@ class Controller implements ActionListener {
 			if (!isNormalMove) {
 				efficiency = attackEfficiency[cpuPokemon[CPUActive]][playerPokemon[PlayerActive]];
 			} else {
-				efficiency = attackEfficiency[CPUActive][NORMAL];
+				efficiency = attackEfficiency[cpuPokemon[CPUActive]][NORMAL];
 			}
 			playerHealth[PlayerActive] -= damageDone*efficiency ;
+			return " (-"+damageDone*efficiency+")";
 		}
-		return null;
+	}
+	
+	protected void cpuTurn() {
+		isPlayerTurn = false; 
+		isNormalMove = cpu.cpuMove();
+		DamageMessage();
+		UpdateHealth();
+		if (isPlayerTurn) {
+			isPokemonFainted(CPUActive);
+		} else {
+			isPokemonFainted(PlayerActive);
+		}
+		isAllDead(); 
+		isPlayerTurn = true; 
 	}
 	
 	
