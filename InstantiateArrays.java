@@ -1,14 +1,8 @@
 package game;
 
 import java.awt.Color;
-import java.awt.Container;
-import java.util.Scanner;
-
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class InstantiateArrays {
 	
@@ -27,7 +21,6 @@ public class InstantiateArrays {
 	public final static int MAX_HEALTH = 50; 
 	
 	PokemonSuper game = new PokemonSuper();
-//	InstantiateArrays myArrays = new InstantiateArrays();
 	Fire fire = new Fire(); 
 	Water water = new Water();
 	Electric electric = new Electric(); 
@@ -47,40 +40,12 @@ public class InstantiateArrays {
 	public static String getTypeName[] = new String[NUM_OF_TYPES];
 	public static Color getColor[] = new Color[NUM_OF_TYPES];
 	public static int getDamage[] = new int[NUM_OF_TYPES];
-	
-    public JFrame gameJFrame;
-    public Container gameContentPane;
-    public JPanel fightJPanel; 
-    public JPanel switchJPanel;
-    public JPanel playerPanel;
-    public JPanel CPUPanel; 
-    public JPanel userMessagePanel; 
-    public JButton normButton; 
-    public JButton typeButton; 
-    public JButton switch1Button; 
-    public JButton switch2Button; 
-    public JButton switch3Button; 
-    public JLabel player1;
-    public JLabel pc1;
-    public JLabel userMessageLabel; 
     
-	public static Scanner sc;
-	
-	public int jframeWidth = 400; 
-	public int jframeHeight = 500; 
-	public int imageWidth = 80; 
-	public int imageHeight = 80; 
-	public int plPokePos = 200; 
 	public final static Color GREEN = Color.decode("#A6D785");
 	public final static Color WHITE = Color.decode("#FFFFFF");
 	public final static Color BLACK = Color.decode("#555555");
 	protected final static int matteTop = 2; 
 	protected final static int matteBottom = 15; 
-    
-	protected int PlayerActive = 0;
-	protected int CPUActive = 3;
-	protected boolean isNormalMove; 
-	
 	
 	protected JLabel getPlayerSprite(int i) {
     	getSprite[NORMAL] = null; 
