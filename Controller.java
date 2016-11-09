@@ -19,8 +19,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import java.util.Timer;
+import java.util.TimerTask;
 
-class Controller implements ActionListener {
+class Controller extends TimerTask implements ActionListener{
+	
+	
 	
 	public final static int NUM_OF_TYPES = 9; 
 	public final static int NUM_OF_POKEMON = 8; 
@@ -107,7 +111,10 @@ class Controller implements ActionListener {
 	protected boolean isNormalMove; 
 	protected boolean isPlayerTurn = true; 
 	protected boolean didIWin = false; 
-	protected boolean didILose = false; 
+	protected boolean didILose = false;
+	
+	protected Timer myTimer = new Timer();
+	private static final int TIME = 5000;
 	
     public Controller()  {
     	
@@ -281,6 +288,7 @@ class Controller implements ActionListener {
 				System.out.println(whichPokemon(cpuPokemon[i]) + " fainted!");
 				int pokemonAct = CPUActive%3;
 				CPUActive = ++pokemonAct; 
+				myTimer.schedule(this, TIME);
 			} 
 		} else {
 			if (playerHealth[i] <= 0) {
@@ -289,6 +297,7 @@ class Controller implements ActionListener {
 				System.out.println(whichPokemon(playerPokemon[i]) + " fainted!");
 				int pokemonAct = PlayerActive%3;
 				PlayerActive = ++pokemonAct; 
+				myTimer.schedule(this, TIME);
 			}
 		}
 			
@@ -305,6 +314,7 @@ class Controller implements ActionListener {
 			
 			if (didIWin) {
 				System.out.println("Player defeated! You won!");
+				isPlayerTurn = false; 
 			}
 		} else {
 			didILose = true;
@@ -499,7 +509,13 @@ class Controller implements ActionListener {
 		}
 		return null;
 	}
-	
+	public void run(){
+		System.out.println("Timer Died");
+		UpdateHealth();
+		UpdateImage();
+		
+		
+	}
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
