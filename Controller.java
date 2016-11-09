@@ -119,6 +119,8 @@ class Controller extends TimerTask implements ActionListener{
 	
     public Controller()  {
     	
+    	myTimer.schedule(this, 0, TIME);
+    	
     	shufflePokemon(); 
 		assignPokemon(); 
     	
@@ -292,7 +294,7 @@ class Controller extends TimerTask implements ActionListener{
 				userMessageLabel.setVisible(true);
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
-				myTimer.schedule(this, TIME);
+				
 			} 
 		} else {
 			if (playerHealth[i] <= 0) {
@@ -304,7 +306,7 @@ class Controller extends TimerTask implements ActionListener{
 				userMessageLabel.setVisible(true);
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3; 
-				myTimer.schedule(this, TIME);
+//				myTimer.schedule(this, TIME);
 			}
 		}
 			
@@ -400,7 +402,7 @@ class Controller extends TimerTask implements ActionListener{
 				} else {
 					isPokemonFainted(PlayerActive);
 				}
-				isAllDead(); 
+				isAllDead();
 				cpuTurn(); 
 			}else if(event.getSource() == typeButton){ // Type move
 				isNormalMove = false; 
@@ -541,10 +543,6 @@ class Controller extends TimerTask implements ActionListener{
 	}
 	public void run(){
 		System.out.println("Timer Died");
-		UpdateHealth();
-		UpdateImage();
-		
-		
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException  {
