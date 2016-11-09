@@ -201,7 +201,7 @@ class Controller implements ActionListener {
 		for (int i = 0; i < NUM_OF_TYPES; i++) {
 			for (int j = 0; j < NUM_OF_TYPES; j++) {
 				attackEfficiency[i][j] = Double.parseDouble(sc.next()); 
-				System.out.print(attackEfficiency[i][j] + " ");
+//				System.out.print(attackEfficiency[i][j] + " ");
 			}
 			System.out.println();
 		} 
