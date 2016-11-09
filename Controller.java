@@ -19,8 +19,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import java.util.Timer;
+import java.util.TimerTask;
 
-class Controller implements ActionListener {
+class Controller extends TimerTask implements ActionListener{
+	
+	
 	
 	public final static int NUM_OF_TYPES = 9; 
 	public final static int NUM_OF_POKEMON = 8; 
@@ -108,7 +112,10 @@ class Controller implements ActionListener {
 	protected boolean isNormalMove; 
 	protected boolean isPlayerTurn = true; 
 	protected boolean didIWin = false; 
-	protected boolean didILose = false; 
+	protected boolean didILose = false;
+	
+	protected Timer myTimer = new Timer();
+	private static final int TIME = 5000;
 	
     public Controller()  {
     	
@@ -285,6 +292,7 @@ class Controller implements ActionListener {
 				userMessageLabel.setVisible(true);
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
+				myTimer.schedule(this, TIME);
 			} 
 		} else {
 			if (playerHealth[i] <= 0) {
@@ -296,6 +304,7 @@ class Controller implements ActionListener {
 				userMessageLabel.setVisible(true);
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3; 
+				myTimer.schedule(this, TIME);
 			}
 		}
 			
@@ -315,6 +324,7 @@ class Controller implements ActionListener {
 				userMessageLabel.setVisible(false);
 				userMessageLabel.setText("Player defeated! You won!");
 				userMessageLabel.setVisible(true);
+				isPlayerTurn = false; 
 			}
 		} else {
 			didILose = true;
@@ -529,7 +539,13 @@ class Controller implements ActionListener {
 		isAllDead(); 
 		isPlayerTurn = true; 
 	}
-	
+	public void run(){
+		System.out.println("Timer Died");
+		UpdateHealth();
+		UpdateImage();
+		
+		
+	}
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
