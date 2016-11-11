@@ -542,7 +542,7 @@ class Controller extends TimerTask implements ActionListener{
 		isPlayerTurn = true; 
 	}
 	public void run(){
-		System.out.println("Timer Died");
+		System.out.print(".");
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException  {
