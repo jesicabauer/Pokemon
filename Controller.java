@@ -115,11 +115,13 @@ class Controller extends TimerTask implements ActionListener{
 	protected boolean didILose = false;
 	
 	protected Timer myTimer = new Timer();
-	private static final int TIME = 5000;
+	private static final int DISPLAY_TIME = 2000;
+	private static final int DECREMENT = 100; 
+	private static int countdown = 0; 
 	
     public Controller()  {
     	
-    	myTimer.schedule(this, 0, TIME);
+    	myTimer.schedule(this, 0, DECREMENT);
     	
     	shufflePokemon(); 
 		assignPokemon(); 
@@ -186,11 +188,6 @@ class Controller extends TimerTask implements ActionListener{
 		CPUPanel.setBorder(BorderFactory.createMatteBorder(
 				matteTop, matteBottom, matteTop, matteBottom, myArrays.getColor(cpuPokemon[CPUActive])));
 		CPUPanel.setBackground(WHITE);
-		
-		userMessagePanel = new JPanel(); 
-		userMessagePanel.setBounds(50,90,285,100);
-		userMessagePanel.setBorder(BorderFactory.createMatteBorder(matteTop, matteBottom, matteTop, matteBottom, BLACK));
-		userMessagePanel.setBackground(WHITE);
 		
 		userMessageLabel = new JLabel(); 
 		userMessagePanel.add(userMessageLabel, SwingConstants.CENTER);
@@ -292,6 +289,8 @@ class Controller extends TimerTask implements ActionListener{
 				userMessageLabel.setVisible(false);
 				userMessageLabel.setText(whichPokemon(cpuPokemon[i]) + " fainted!");
 				userMessageLabel.setVisible(true);
+				userMessagePanel.setVisible(true);
+				userMessagePanel.setVisible(true);
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
 				
@@ -304,6 +303,8 @@ class Controller extends TimerTask implements ActionListener{
 				userMessageLabel.setVisible(false);
 				userMessageLabel.setText(whichPokemon(playerPokemon[i]) + " fainted!");
 				userMessageLabel.setVisible(true);
+				userMessagePanel.setVisible(true);
+				userMessagePanel.setVisible(true);
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3; 
 //				myTimer.schedule(this, TIME);
@@ -326,6 +327,7 @@ class Controller extends TimerTask implements ActionListener{
 				userMessageLabel.setVisible(false);
 				userMessageLabel.setText("Player defeated! You won!");
 				userMessageLabel.setVisible(true);
+				userMessagePanel.setVisible(true);
 				isPlayerTurn = false; 
 			}
 		} else {
@@ -340,6 +342,7 @@ class Controller extends TimerTask implements ActionListener{
 				userMessageLabel.setVisible(false);
 				userMessageLabel.setText("You have been defeated! You lost!");
 				userMessageLabel.setVisible(true);
+				userMessagePanel.setVisible(true);
 			}
 		}
 	}
@@ -355,6 +358,7 @@ class Controller extends TimerTask implements ActionListener{
 				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getNormMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
 			}
 			userMessageLabel.setVisible(true);
+			userMessagePanel.setVisible(true);
 		} else {
 			if (!isNormalMove) {		
 				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[CPUActive])+" used " + myArrays.getMove(cpuPokemon[CPUActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
@@ -364,6 +368,7 @@ class Controller extends TimerTask implements ActionListener{
 //				System.out.println("CPU used a normal move!");
 			}
 			userMessageLabel.setVisible(true);
+			userMessagePanel.setVisible(true);
 		} 
 	}
 	
@@ -388,11 +393,13 @@ class Controller extends TimerTask implements ActionListener{
 	protected void SwitchMessage(){ // message that appears when the player chooses to change their pokemon
 		userMessageLabel.setVisible(false);
 		userMessageLabel.setText("You switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
-		userMessageLabel.setVisible(true);	
+		userMessageLabel.setVisible(true);
+		userMessagePanel.setVisible(true);
 	}
 	
 	public void actionPerformed(ActionEvent event){ // button pressed
-		if(isPlayerTurn) {
+		countdown = DISPLAY_TIME;
+		if(isPlayerTurn && !didIWin && !didILose) {
 			if(event.getSource() == normButton){ // Normal move
 				isNormalMove = true; 
 				DamageMessage();
@@ -403,7 +410,9 @@ class Controller extends TimerTask implements ActionListener{
 					isPokemonFainted(PlayerActive);
 				}
 				isAllDead();
-				cpuTurn(); 
+				if(!didIWin && countdown<=0) {
+					cpuTurn(); 
+				}
 			}else if(event.getSource() == typeButton){ // Type move
 				isNormalMove = false; 
 				DamageMessage();
@@ -414,19 +423,27 @@ class Controller extends TimerTask implements ActionListener{
 					isPokemonFainted(PlayerActive);
 				}
 				isAllDead(); 
-				cpuTurn(); 
+				if(!didIWin && countdown<=0) {
+					cpuTurn(); 
+				}
 			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 				PlayerActive = 0;
 				switchPokemon();
-				cpuTurn(); 
+				if(!didIWin && countdown<=0) {
+					cpuTurn(); 
+				}
 			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
 				PlayerActive = 1;
 				switchPokemon();
-				cpuTurn(); 
+				if(!didIWin && countdown<=0) {
+					cpuTurn(); 
+				} 
 			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
 				PlayerActive = 2;
 				switchPokemon();
-				cpuTurn(); 
+				if(!didIWin && countdown<=0) {
+					cpuTurn(); 
+				}
 			}
 		}
 	}
@@ -529,6 +546,7 @@ class Controller extends TimerTask implements ActionListener{
 	}
 	
 	protected void cpuTurn() {
+		countdown = DISPLAY_TIME; 
 		isPlayerTurn = false; 
 		isNormalMove = cpu.cpuMove();
 		DamageMessage();
@@ -541,8 +559,23 @@ class Controller extends TimerTask implements ActionListener{
 		isAllDead(); 
 		isPlayerTurn = true; 
 	}
+	
 	public void run(){
-		System.out.print(".");
+		
+		if (countdown >= 0) {
+		countdown -= DECREMENT; 
+		System.out.print(countdown);
+		userMessageLabel = new JLabel();
+		userMessagePanel = new JPanel(); 
+		userMessagePanel.setBounds(50,90,285,100);
+		userMessagePanel.setBorder(BorderFactory.createMatteBorder(matteTop, matteBottom, matteTop, matteBottom, BLACK));
+		userMessagePanel.setBackground(WHITE);
+		} else {
+			userMessagePanel.setVisible(false);
+			userMessageLabel.setVisible(false);
+			gameJFrame.repaint();
+		}
+		
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException  {
