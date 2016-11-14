@@ -62,6 +62,9 @@ class Controller extends TimerTask implements ActionListener{
 	public static double playerHealth[] = new double[ASSIGNED_POKEMON];
 	public static double cpuHealth[] = new double[ASSIGNED_POKEMON];
 	
+	public static double CPU_MAX_HEALTH = 50;
+	public static double PLAYER_MAX_HEALTH = 100;
+	
 	public static boolean isDead[] = new boolean[NUM_OF_TYPES];
 	public static boolean isPlayerDead[] = new boolean[ASSIGNED_POKEMON];
 	public static boolean isCPUDead[] = new boolean[ASSIGNED_POKEMON];
@@ -185,8 +188,8 @@ class Controller extends TimerTask implements ActionListener{
 		gameContentPane.add(fightJPanel);
 		gameContentPane.add(switchJPanel);
 
-		playerPanel = CreateIDBoxes(playerPokemon[PlayerActive],pokemonHealth[PlayerActive]);
-		CPUPanel = CreateIDBoxes(cpuPokemon[CPUActive],pokemonHealth[PlayerActive]);		
+		playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],playerHealth[PlayerActive]);
+		CPUPanel = CreateCPUIDBoxes(cpuPokemon[CPUActive],cpuHealth[CPUActive]);		
 		playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
 		playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(playerPokemon[PlayerActive])));
 		playerPanel.setBackground(WHITE);
@@ -257,7 +260,10 @@ class Controller extends TimerTask implements ActionListener{
 		
 		for (int i = 0; i < NUM_OF_POKEMON; i++) {
 			pokemon[i] = temp.get(i);
-			pokemonHealth[i] = MAX_HEALTH; 
+			if (i<3){
+				pokemonHealth[i] = PLAYER_MAX_HEALTH;
+				pokemonHealth[i+3] = CPU_MAX_HEALTH;
+			}
 			isDead[i] = false; 
 //			System.out.print(pokemon[i]);
 		}
@@ -282,11 +288,22 @@ class Controller extends TimerTask implements ActionListener{
 	}
 	
 
-	private JPanel CreateIDBoxes(int Pokemon, double pokemonHealth){ // creates the health boxes
+	private JPanel CreatePlayerIDBoxes(int Pokemon, double pokemonHealth){ // creates the health boxes
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new GridLayout(2,1));
 		JLabel PokemonName = new JLabel("<html><font size=5>" + whichPokemon(Pokemon) + "</font></html>", SwingConstants.CENTER);
-		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
+		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + PLAYER_MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
+		
+		myPanel.add(PokemonName);
+		myPanel.add(Health);
+		return myPanel;
+	}
+	
+	private JPanel CreateCPUIDBoxes(int Pokemon, double pokemonHealth){ // creates the health boxes
+		JPanel myPanel = new JPanel();
+		myPanel.setLayout(new GridLayout(2,1));
+		JLabel PokemonName = new JLabel("<html><font size=5>" + whichPokemon(Pokemon) + "</font></html>", SwingConstants.CENTER);
+		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + CPU_MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
 		
 		myPanel.add(PokemonName);
 		myPanel.add(Health);
@@ -488,7 +505,7 @@ class Controller extends TimerTask implements ActionListener{
 			normButton.setText("<html><center>" + myArrays.getNormMove(playerPokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
 			normButton.setVisible(true);
 			playerPanel.setVisible(false);
-			playerPanel = CreateIDBoxes(playerPokemon[PlayerActive],50);
+			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],50);
 			playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
 			playerPanel.setBackground(WHITE);
 			playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(playerPokemon[PlayerActive])));
@@ -512,8 +529,8 @@ class Controller extends TimerTask implements ActionListener{
 		if (cpuHealth[CPUActive] <= 0) {
 			cpuHealth[CPUActive] = 0;
 		}
-		playerPanel = CreateIDBoxes(playerPokemon[PlayerActive],playerHealth[PlayerActive]);
-		CPUPanel = CreateIDBoxes(cpuPokemon[CPUActive],cpuHealth[CPUActive]);		
+		playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],playerHealth[PlayerActive]);
+		CPUPanel = CreateCPUIDBoxes(cpuPokemon[CPUActive],cpuHealth[CPUActive]);		
 		playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
 		playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(playerPokemon[PlayerActive])));
 		playerPanel.setBackground(WHITE);
