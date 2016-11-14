@@ -113,12 +113,15 @@ class Controller extends TimerTask implements ActionListener{
 	protected boolean isPlayerTurn = true; 
 	protected boolean didIWin = false; 
 	protected boolean didILose = false;
+	protected boolean isGameReady = false; 
+	protected boolean waiting = true; 
 	
 	protected Timer myTimer = new Timer();
 
 	private static final int DISPLAY_TIME = 2000;
 	private static final int DECREMENT = 100; 
-	private static int countdown = 0; 
+	private static int playercountdown = 0; 
+	private static int cpucountdown = 0; 
 	
     public Controller()  {
     	
@@ -169,7 +172,9 @@ class Controller extends TimerTask implements ActionListener{
     	switchJPanel.add(switch2Button);
     	switchJPanel.add(switch3Button); 
     	
-
+		userMessageLabel = new JLabel();
+		userMessagePanel = new JPanel(); 
+		
 		player1 = myArrays.getPlayerSprite(playerPokemon[PlayerActive]); 
 		pc1 = myArrays.getPCSprite(cpuPokemon[CPUActive]); 
 		player1.setBounds(0,plPokePos,imageWidth,imageHeight);
@@ -206,6 +211,8 @@ class Controller extends TimerTask implements ActionListener{
 		fightJPanel.setVisible(true);
 		switchJPanel.setVisible(true);
 		gameJFrame.setVisible(true); 
+		
+		isGameReady = true; 
 		
     }
     
@@ -411,7 +418,7 @@ class Controller extends TimerTask implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent event){ // button pressed
-		countdown = DISPLAY_TIME;
+		playercountdown = DISPLAY_TIME;
 		if(isPlayerTurn && !didIWin && !didILose) {
 			if(event.getSource() == normButton){ // Normal move
 				isNormalMove = true; 
@@ -423,9 +430,10 @@ class Controller extends TimerTask implements ActionListener{
 					isPokemonFainted(PlayerActive);
 				}
 				isAllDead();
-				if(!didIWin && countdown<=0) {
-					cpuTurn(); 
-				}
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
 			}else if(event.getSource() == typeButton){ // Type move
 				isNormalMove = false; 
 				DamageMessage();
@@ -435,28 +443,33 @@ class Controller extends TimerTask implements ActionListener{
 				} else {
 					isPokemonFainted(PlayerActive);
 				}
-				isAllDead(); 
-			if(!didIWin && countdown<=0) {
-					cpuTurn(); 
-				}
+
+				isAllDead();
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
 			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
 				PlayerActive = 0;
 				switchPokemon();
-				if(!didIWin && countdown<=0) {
-					cpuTurn(); 
-				}
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
 			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
 				PlayerActive = 1;
 				switchPokemon();
-				if(!didIWin && countdown<=0) {
-					cpuTurn(); 
-				} 
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				} 
 			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
 				PlayerActive = 2;
 				switchPokemon();
-				if(!didIWin && countdown<=0) {
-					cpuTurn(); 
-				}
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
 			}
 		}
 	}
@@ -560,8 +573,8 @@ class Controller extends TimerTask implements ActionListener{
 	
 	protected void cpuTurn() {
 
-		countdown = DISPLAY_TIME; 
-		isPlayerTurn = false; 
+//		System.out.println("I MADE IT TO THE CPU\'S TURN");
+		cpucountdown = DISPLAY_TIME; 
 		isNormalMove = cpu.cpuMove();
 		DamageMessage();
 		UpdateHealth();
@@ -571,24 +584,40 @@ class Controller extends TimerTask implements ActionListener{
 			isPokemonFainted(PlayerActive);
 		}
 		isAllDead(); 
-		isPlayerTurn = true; 
 	}
 
 	
 	public void run(){
-		
-		if (countdown >= 0) {
-		countdown -= DECREMENT; 
-		System.out.print(countdown);
-		userMessageLabel = new JLabel();
-		userMessagePanel = new JPanel(); 
-		userMessagePanel.setBounds(50,90,285,100);
-		userMessagePanel.setBorder(BorderFactory.createMatteBorder(matteTop, matteBottom, matteTop, matteBottom, BLACK));
-		userMessagePanel.setBackground(WHITE);
-		} else {
-			userMessagePanel.setVisible(false);
-			userMessageLabel.setVisible(false);
-			gameJFrame.repaint();
+		if(isGameReady) {
+			if (isPlayerTurn) {
+				if (!waiting) {
+					if (playercountdown > 0) {
+					playercountdown -= DECREMENT; 
+		//			System.out.print(playercountdown);
+					userMessagePanel.setBounds(50,90,285,100);
+					userMessagePanel.setBorder(BorderFactory.createMatteBorder(matteTop, matteBottom, matteTop, matteBottom, BLACK));
+					userMessagePanel.setBackground(WHITE);
+					} else {
+						userMessagePanel.setVisible(false);
+						isPlayerTurn = false; 
+						cpuTurn(); 
+						gameJFrame.repaint();
+					} 
+				}
+			} else {
+				if (cpucountdown > 0) {
+					cpucountdown -= DECREMENT; 
+	//				System.out.print(playercountdown);
+					userMessagePanel.setBounds(50,90,285,100);
+					userMessagePanel.setBorder(BorderFactory.createMatteBorder(matteTop, matteBottom, matteTop, matteBottom, BLACK));
+					userMessagePanel.setBackground(WHITE);
+				} else {
+					userMessagePanel.setVisible(false);
+					isPlayerTurn = true; 
+					waiting = true;
+					gameJFrame.repaint();
+				}
+			}
 		}
 		
 	}
