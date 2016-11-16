@@ -316,29 +316,36 @@ class Controller extends TimerTask implements ActionListener{
 				cpuHealth[i] = 0;
 				isCPUDead[i] = true; 
 //				System.out.println(whichPokemon(cpuPokemon[i]) + " fainted!");
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText(whichPokemon(cpuPokemon[i]) + " fainted!");
-				userMessageLabel.setVisible(true);
+				
 
 				userMessagePanel.setVisible(true);
 				userMessagePanel.setVisible(true);
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
-				
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[i]) + " fainted! <br>COMPUTER switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
+				userMessageLabel.setVisible(true);
+				faintedSwitch(); 
+				UpdateHealth();
+				UpdateImage();
 			} 
 		} else {
 			if (playerHealth[i] <= 0) {
 				playerHealth[i] = 0;
 				isPlayerDead[i] = true;
 //				System.out.println(whichPokemon(playerPokemon[i]) + " fainted!");
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText(whichPokemon(playerPokemon[i]) + " fainted!");
-				userMessageLabel.setVisible(true);
+				
 
 				userMessagePanel.setVisible(true);
 				userMessagePanel.setVisible(true);
 				int pokemonAct = ++PlayerActive;
-				PlayerActive = pokemonAct%3; 
+				PlayerActive = pokemonAct%3;
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[i]) + " fainted! <br>You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
+				userMessageLabel.setVisible(true);
+				faintedSwitch(); 
+				UpdateHealth();
+				UpdateImage();
 //				myTimer.schedule(this, TIME);
 			}
 		}
@@ -409,29 +416,56 @@ class Controller extends TimerTask implements ActionListener{
 	}
 	
 	protected String effectiveness() { // returns how effective an attack is
-		double efficiency; 
-		if (!isNormalMove) {
-			efficiency = attackEfficiency[playerPokemon[PlayerActive]][cpuPokemon[CPUActive]];
+		if (isPlayerTurn) {
+			double efficiency; 
+			if (!isNormalMove) {
+				efficiency = attackEfficiency[playerPokemon[PlayerActive]][cpuPokemon[CPUActive]];
+			} else {
+				efficiency = attackEfficiency[NORMAL][cpuPokemon[CPUActive]];
+			}
+			String message = ""; 
+			if (efficiency == 2.0) {
+				message = "It's SUPER EFFECTIVE!";
+			} else if (efficiency == 0.5) {
+				message = "It's NOT VERY EFFECTIVE...";
+			} 
+	//		System.out.println(attackEfficiency[playerPokemon[PlayerActive]][cpuPokemon[CPUActive]]);
+	//		System.out.println(message);
+			return message;
 		} else {
-			efficiency = attackEfficiency[NORMAL][cpuPokemon[CPUActive]];
+			double efficiency; 
+			if (!isNormalMove) {
+				efficiency = attackEfficiency[cpuPokemon[CPUActive]][playerPokemon[PlayerActive]];
+			} else {
+				efficiency = attackEfficiency[NORMAL][playerPokemon[PlayerActive]];
+			}
+			String message = ""; 
+			if (efficiency == 2.0) {
+				message = "It's SUPER EFFECTIVE!";
+			} else if (efficiency == 0.5) {
+				message = "It's NOT VERY EFFECTIVE...";
+			} 
+	//		System.out.println(attackEfficiency[playerPokemon[PlayerActive]][cpuPokemon[CPUActive]]);
+	//		System.out.println(message);
+			return message; 
 		}
-		String message = ""; 
-		if (efficiency == 2.0) {
-			message = "It's SUPER EFFECTIVE!";
-		} else if (efficiency == 0.5) {
-			message = "It's NOT VERY EFFECTIVE...";
-		} 
-//		System.out.println(attackEfficiency[playerPokemon[PlayerActive]][cpuPokemon[CPUActive]]);
-//		System.out.println(message);
-		return message; 
+		
 	}
 	
 	protected void SwitchMessage(){ // message that appears when the player chooses to change their pokemon
-		userMessageLabel.setVisible(false);
-		userMessageLabel.setText("You switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
-		userMessageLabel.setVisible(true);	
+		if(isPlayerTurn) {
+			userMessageLabel.setVisible(false);
+			userMessageLabel.setText("You switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
+			userMessageLabel.setVisible(true);	
+	
+			userMessagePanel.setVisible(true);
+		} else {
+			userMessageLabel.setVisible(false);
+			userMessageLabel.setText("COMPUTER switched to "+whichPokemon(cpuPokemon[CPUActive])+"!");
+			userMessageLabel.setVisible(true);	
 
-		userMessagePanel.setVisible(true);
+			userMessagePanel.setVisible(true);
+		}
 	}
 	
 	public void actionPerformed(ActionEvent event){ // button pressed
@@ -492,6 +526,7 @@ class Controller extends TimerTask implements ActionListener{
 	}
 	
 	protected void switchPokemon() { // Code to switch the graphics when the pokemon changes 
+
 		if (isPlayerTurn) {
 			SwitchMessage(); 
 			player1.setVisible(false); 
@@ -512,6 +547,43 @@ class Controller extends TimerTask implements ActionListener{
 			gameContentPane.add(playerPanel);
 			playerPanel.setVisible(true);
 		} else {
+			pc1.setVisible(false);
+			pc1 = myArrays.getPCSprite(cpuPokemon[CPUActive]); 
+			pc1.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
+			gameContentPane.add(pc1);
+			pc1.setVisible(true);
+		}
+	}
+	
+	protected void faintedSwitch() { // Code to switch the graphics when the pokemon changes 
+		if (isPlayerTurn) {
+//			userMessageLabel.setVisible(false);
+//			userMessageLabel.setText("COMPUTER switched to "+whichPokemon(cpuPokemon[CPUActive])+"!");
+//			userMessageLabel.setVisible(true);	
+//			userMessagePanel.setVisible(true);
+			
+			player1.setVisible(false); 
+			player1 = myArrays.getPlayerSprite(playerPokemon[PlayerActive]);
+			player1.setBounds(0,plPokePos,imageWidth,imageHeight);
+			gameContentPane.add(player1);
+			typeButton.setVisible(false);
+			typeButton.setText("<html><center>" + myArrays.getMove(playerPokemon[PlayerActive]) + "<br><font size=1>(" + myArrays.getTypeName(playerPokemon[PlayerActive]) + ")</font></center></html>");
+			typeButton.setVisible(true);
+			normButton.setVisible(false);
+			normButton.setText("<html><center>" + myArrays.getNormMove(playerPokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
+			normButton.setVisible(true);
+			playerPanel.setVisible(false);
+			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],50);
+			playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
+			playerPanel.setBackground(WHITE);
+			playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(playerPokemon[PlayerActive])));
+			gameContentPane.add(playerPanel);
+			playerPanel.setVisible(true);
+		} else {
+//			userMessageLabel.setVisible(false);
+//			userMessageLabel.setText("You switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
+//			userMessageLabel.setVisible(true);	
+//			userMessagePanel.setVisible(true);
 			pc1.setVisible(false);
 			pc1 = myArrays.getPCSprite(cpuPokemon[CPUActive]); 
 			pc1.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
