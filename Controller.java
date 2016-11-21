@@ -736,6 +736,11 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 			if (isPlayerTurn) {
 				if (!waiting) {
 					if (playercountdown > 0) {
+					normButton.setEnabled(false);
+					typeButton.setEnabled(false);
+					switch1Button.setEnabled(false);
+					switch2Button.setEnabled(false);
+					switch3Button.setEnabled(false);
 					playercountdown -= DECREMENT; 
 		//			System.out.print(playercountdown);
 					userMessagePanel.setBounds(50,90,285,100);
@@ -758,6 +763,11 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 				} else {
 					userMessagePanel.setVisible(false);
 					isPlayerTurn = true; 
+					normButton.setEnabled(true);
+					typeButton.setEnabled(true);
+					switch1Button.setEnabled(true);
+					switch2Button.setEnabled(true);
+					switch3Button.setEnabled(true);
 					waiting = true;
 					gameJFrame.repaint();
 				}
