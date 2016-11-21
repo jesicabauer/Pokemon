@@ -2,9 +2,7 @@ package game;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -20,8 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +38,7 @@ class Controller extends TimerTask implements ActionListener{
 	public final static int PSYCHIC = 6; 
 	public final static int STEEL = 7; 
 	public final static int FAIRY = 8;
+	public final static int MAX_HEALTH = 50; 
 	
 	PokemonSuper game = new PokemonSuper();
 	InstantiateArrays myArrays = new InstantiateArrays();
@@ -543,7 +540,7 @@ class Controller extends TimerTask implements ActionListener{
 			normButton.setText("<html><center>" + myArrays.getNormMove(playerPokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
 			normButton.setVisible(true);
 			playerPanel.setVisible(false);
-			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],playerHealth[PlayerActive]);
+			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],50);
 			playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
 			playerPanel.setBackground(WHITE);
 			playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(playerPokemon[PlayerActive])));
@@ -713,33 +710,9 @@ class Controller extends TimerTask implements ActionListener{
 		}
 		
 	}
-	private static void StartScreen(){
-		JFrame StartFrame = new JFrame();
-		JTextArea myName = new JTextArea("Enter Your Name");
-		JTextArea RivalName = new JTextArea("Enter Your Rival's Name");
-
-		JRadioButton EasyButton = new JRadioButton();
-		EasyButton.setText("Easy");
-		JRadioButton HardButton = new JRadioButton();
-		HardButton.setText("Hard");
-		JPanel radioPanel = new JPanel(); 
-		radioPanel.add(EasyButton);
-		radioPanel.add(HardButton);
-		
-		StartFrame.setLayout(new FlowLayout());
-		StartFrame.add(myName);
-		StartFrame.add(radioPanel);
-		StartFrame.add(RivalName);
-		StartFrame.setVisible(true);
-		StartFrame.setSize(400,400);
-		
-		
-	}
-	
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
-		StartScreen();
 		typeMatrix(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
