@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,7 +29,7 @@ import javax.swing.SwingConstants;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class Controller extends TimerTask implements ActionListener{
+class Controller extends TimerTask implements ActionListener, ItemListener{
 	
 	
 	
@@ -129,10 +132,21 @@ class Controller extends TimerTask implements ActionListener{
 	private static int playercountdown = 0; 
 	private static int cpucountdown = 0; 
 	
+	private JFrame StartFrame = new JFrame();
+	private Container StartContainer = new Container();
+	private JTextArea myName = new JTextArea("Enter Your Name");
+	private JTextArea RivalName = new JTextArea("Enter Your Rival's Name");
+	private JRadioButton EasyButton = new JRadioButton();
+	private JRadioButton HardButton = new JRadioButton();
+	private JButton goButton = new JButton();
+	private JRadioButton CurrentButton;
+	
     public Controller()  {
     	
     	myTimer.schedule(this, 0, DECREMENT);
     	
+    	StartScreen();
+//    	if(isGameReady){
     	shufflePokemon(); 
 		assignPokemon(); 
     	
@@ -213,12 +227,11 @@ class Controller extends TimerTask implements ActionListener{
 		gameContentPane.add(CPUPanel);
 		gameContentPane.add(userMessagePanel);
 		
-		userMessagePanel.setVisible(true);
-		fightJPanel.setVisible(true);
-		switchJPanel.setVisible(true);
-		gameJFrame.setVisible(true); 
-		
-		isGameReady = true; 
+//		userMessagePanel.setVisible(true);
+//		fightJPanel.setVisible(true);
+//		switchJPanel.setVisible(true);
+//		gameJFrame.setVisible(true); 
+//    	}
 		
     }
     
@@ -236,9 +249,7 @@ class Controller extends TimerTask implements ActionListener{
 		}
 		return "Oh no";
 	}
-	
-    
-       	
+	     	
 	public static void typeMatrix() throws FileNotFoundException {
 		sc = new Scanner(new File("type-matrix.txt"));
 		for (int i = 0; i < NUM_OF_TYPES; i++) {
@@ -250,8 +261,6 @@ class Controller extends TimerTask implements ActionListener{
 		} 
 	}
 	
-
-
 	private void shufflePokemon() {
 		List<Integer> temp = new ArrayList<>(); 
 		for (int i = 0; i < NUM_OF_POKEMON; i++) {
@@ -290,7 +299,6 @@ class Controller extends TimerTask implements ActionListener{
 		}
 	}
 	
-
 	private JPanel CreatePlayerIDBoxes(int Pokemon, double pokemonHealth){ // creates the health boxes
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new GridLayout(2,1));
@@ -391,7 +399,6 @@ class Controller extends TimerTask implements ActionListener{
 		}
 	}
 
-
 	protected void DamageMessage(){ // message when a pokemon is damaged
 		userMessageLabel.setVisible(false);
 		if (isPlayerTurn) {
@@ -473,6 +480,16 @@ class Controller extends TimerTask implements ActionListener{
 	
 	public void actionPerformed(ActionEvent event){ // button pressed
 		playercountdown = DISPLAY_TIME;
+		
+		if(event.getSource() == goButton){
+			isGameReady = true;
+			StartFrame.setVisible(false);
+			userMessagePanel.setVisible(true);
+			fightJPanel.setVisible(true);
+			switchJPanel.setVisible(true);
+			gameJFrame.setVisible(true); 
+		}
+		
 		if(isPlayerTurn && !didIWin && !didILose) {
 			if(event.getSource() == normButton){ // Normal move
 				isNormalMove = true; 
@@ -713,37 +730,56 @@ class Controller extends TimerTask implements ActionListener{
 		}
 		
 	}
-	private static void StartScreen(){
-		JFrame StartFrame = new JFrame();
-		JTextArea myName = new JTextArea("Enter Your Name");
-		JTextArea RivalName = new JTextArea("Enter Your Rival's Name");
-
-		JRadioButton EasyButton = new JRadioButton();
+	private void StartScreen(){
+		
+		
+		ButtonGroup Buttons = new ButtonGroup();
+		
 		EasyButton.setText("Easy");
-		JRadioButton HardButton = new JRadioButton();
+		EasyButton.addItemListener(this);
 		HardButton.setText("Hard");
+		HardButton.addItemListener(this);
 		JPanel radioPanel = new JPanel(); 
 		radioPanel.add(EasyButton);
 		radioPanel.add(HardButton);
 		
-		StartFrame.setLayout(new FlowLayout());
-		StartFrame.add(myName);
-		StartFrame.add(radioPanel);
-		StartFrame.add(RivalName);
-		StartFrame.setVisible(true);
-		StartFrame.setSize(400,400);
+		Buttons.add(EasyButton);
+		Buttons.add(HardButton);
 		
+
+		goButton.setText("Start Game!");
+		goButton.addActionListener(this);
+		
+		StartContainer.setLayout(new FlowLayout());
+		StartContainer.add(myName);
+		StartContainer.add(radioPanel);
+		StartContainer.add(RivalName);
+		StartContainer.add(goButton);
+		StartContainer.setVisible(true);
+		StartFrame.setSize(400,400);
+		StartFrame.add(StartContainer);
+		StartFrame.setVisible(true);
+		isGameReady = false;
+		
+		
+	}
+	@Override
+	public void itemStateChanged(ItemEvent event) {
+		// TODO Auto-generated method stub
+		CurrentButton = (JRadioButton) event.getSource();
 		
 	}
 	
 	
 	public static void main(String[] args) throws FileNotFoundException  {
 		
-		StartScreen();
+		
 		typeMatrix(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
 
 	}
+
+	
 	
 }
