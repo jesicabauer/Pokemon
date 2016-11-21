@@ -2,9 +2,12 @@ package game;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,16 +16,19 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class Controller extends TimerTask implements ActionListener{
+class Controller extends TimerTask implements ActionListener, ItemListener{
 	
 	
 	
@@ -126,10 +132,21 @@ class Controller extends TimerTask implements ActionListener{
 	private static int playercountdown = 0; 
 	private static int cpucountdown = 0; 
 	
+	private JFrame StartFrame = new JFrame();
+	private Container StartContainer = new Container();
+	private JTextArea myName = new JTextArea("Enter Your Name");
+	private JTextArea RivalName = new JTextArea("Enter Your Rival's Name");
+	private JRadioButton EasyButton = new JRadioButton();
+	private JRadioButton HardButton = new JRadioButton();
+	private JButton goButton = new JButton();
+	private JRadioButton CurrentButton;
+	
     public Controller()  {
     	
     	myTimer.schedule(this, 0, DECREMENT);
     	
+    	StartScreen();
+//    	if(isGameReady){
     	shufflePokemon(); 
 		assignPokemon(); 
     	
@@ -210,32 +227,45 @@ class Controller extends TimerTask implements ActionListener{
 		gameContentPane.add(CPUPanel);
 		gameContentPane.add(userMessagePanel);
 		
-		userMessagePanel.setVisible(true);
-		fightJPanel.setVisible(true);
-		switchJPanel.setVisible(true);
-		gameJFrame.setVisible(true); 
-		
-		isGameReady = true; 
+//		userMessagePanel.setVisible(true);
+//		fightJPanel.setVisible(true);
+//		switchJPanel.setVisible(true);
+//		gameJFrame.setVisible(true); 
+//    	}
 		
     }
     
-	protected String whichPokemon(int i){
-		switch(i){
-			case 0: return "Normal";
-			case 1: return fire.getName();
-			case 2: return water.getName();
-			case 3: return electric.getName();
-			case 4: return grass.getName();
-			case 5: return fighting.getName();
-			case 6: return psychic.getName();
-			case 7: return steel.getName();
-			case 8: return fairy.getName();
-		}
-		return "Oh no";
+    private void StartScreen(){
+		
+		ButtonGroup Buttons = new ButtonGroup();
+		
+		EasyButton.setText("Easy");
+		EasyButton.addItemListener(this);
+		HardButton.setText("Hard");
+		HardButton.addItemListener(this);
+		JPanel radioPanel = new JPanel(); 
+		radioPanel.add(EasyButton);
+		radioPanel.add(HardButton);
+		
+		Buttons.add(EasyButton);
+		Buttons.add(HardButton);
+		
+
+		goButton.setText("Start Game!");
+		goButton.addActionListener(this);
+		
+		StartContainer.setLayout(new FlowLayout());
+		StartContainer.add(myName);
+		StartContainer.add(radioPanel);
+		StartContainer.add(RivalName);
+		StartContainer.add(goButton);
+		StartContainer.setVisible(true);
+		StartFrame.setSize(400,400);
+		StartFrame.add(StartContainer);
+		StartFrame.setVisible(true);
+		isGameReady = false;
 	}
 	
-    
-       	
 	public static void typeMatrix() throws FileNotFoundException {
 		sc = new Scanner(new File("type-matrix.txt"));
 		for (int i = 0; i < NUM_OF_TYPES; i++) {
@@ -246,8 +276,6 @@ class Controller extends TimerTask implements ActionListener{
 //			System.out.println();
 		} 
 	}
-	
-
 
 	private void shufflePokemon() {
 		List<Integer> temp = new ArrayList<>(); 
@@ -287,6 +315,20 @@ class Controller extends TimerTask implements ActionListener{
 		}
 	}
 	
+	protected String whichPokemon(int i){
+		switch(i){
+			case 0: return "Normal";
+			case 1: return fire.getName();
+			case 2: return water.getName();
+			case 3: return electric.getName();
+			case 4: return grass.getName();
+			case 5: return fighting.getName();
+			case 6: return psychic.getName();
+			case 7: return steel.getName();
+			case 8: return fairy.getName();
+		}
+		return "Oh no";
+	}
 
 	private JPanel CreatePlayerIDBoxes(int Pokemon, double pokemonHealth){ // creates the health boxes
 		JPanel myPanel = new JPanel();
@@ -309,85 +351,30 @@ class Controller extends TimerTask implements ActionListener{
 		myPanel.add(Health);
 		return myPanel;
 	}
-	
-	protected void isPokemonFainted(int i){
+
+	protected String pokemonHit(){ //Runs when the player chooses to attack the cpu
 		if (isPlayerTurn) {
-			if (cpuHealth[i] <= 0) {
-				cpuHealth[i] = 0;
-				isCPUDead[i] = true; 
-//				System.out.println(whichPokemon(cpuPokemon[i]) + " fainted!");
-				
-
-				userMessagePanel.setVisible(true);
-				userMessagePanel.setVisible(true);
-				int pokemonAct = ++CPUActive;
-				CPUActive = pokemonAct%3; 
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[i]) + " fainted! <br>COMPUTER switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
-				userMessageLabel.setVisible(true);
-				faintedSwitch(); 
-				UpdateHealth();
-				UpdateImage();
-			} 
+			double damageDone = game.getDamage();
+			double efficiency; 
+			if (!isNormalMove) {
+				efficiency = attackEfficiency[playerPokemon[PlayerActive]][cpuPokemon[CPUActive]];
+			} else {
+				efficiency = attackEfficiency[NORMAL][cpuPokemon[CPUActive]];
+			}
+			cpuHealth[CPUActive] -= damageDone*efficiency;
+			return " (-"+damageDone*efficiency+")";
 		} else {
-			if (playerHealth[i] <= 0) {
-				playerHealth[i] = 0;
-				isPlayerDead[i] = true;
-//				System.out.println(whichPokemon(playerPokemon[i]) + " fainted!");
-				
-
-				userMessagePanel.setVisible(true);
-				userMessagePanel.setVisible(true);
-				int pokemonAct = ++PlayerActive;
-				PlayerActive = pokemonAct%3;
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[i]) + " fainted! <br>You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
-				userMessageLabel.setVisible(true);
-				faintedSwitch(); 
-				UpdateHealth();
-				UpdateImage();
-//				myTimer.schedule(this, TIME);
+			double damageDone = game.getDamage();
+			double efficiency; 
+			if (!isNormalMove) {
+				efficiency = attackEfficiency[cpuPokemon[CPUActive]][playerPokemon[PlayerActive]];
+			} else {
+				efficiency = attackEfficiency[cpuPokemon[CPUActive]][NORMAL];
 			}
-		}
-			
-	}
-	
-	protected void isAllDead() {
-		if (isPlayerTurn) {
-			didIWin = true;
-			for (int i = 0; i < ASSIGNED_POKEMON; i++) {
-				if (!isCPUDead[i]) {
-					didIWin = false;
-				}
-			}
-			
-			if (didIWin) {
-//				System.out.println("Player defeated! You won!");
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("Player defeated! You won!");
-				userMessageLabel.setVisible(true);
-
-				userMessagePanel.setVisible(true);
-				isPlayerTurn = false; 
-			}
-		} else {
-			didILose = true;
-			for (int i = 0; i < ASSIGNED_POKEMON; i++) {
-				if(!isPlayerDead[i]) {
-					didILose = false; 
-				}
-			}
-			if (didILose) {
-//				System.out.println("You have been defeated! You lost!");
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("You have been defeated! You lost!");
-				userMessageLabel.setVisible(true);
-
-				userMessagePanel.setVisible(true);
-			}
+			playerHealth[PlayerActive] -= damageDone*efficiency ;
+			return " (-"+damageDone*efficiency+")";
 		}
 	}
-
 
 	protected void DamageMessage(){ // message when a pokemon is damaged
 		userMessageLabel.setVisible(false);
@@ -451,78 +438,47 @@ class Controller extends TimerTask implements ActionListener{
 		}
 		
 	}
-	
-	protected void SwitchMessage(){ // message that appears when the player chooses to change their pokemon
-		if(isPlayerTurn) {
-			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("You switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
-			userMessageLabel.setVisible(true);	
-	
-			userMessagePanel.setVisible(true);
+		
+	protected void isPokemonFainted(int i){
+		if (isPlayerTurn) {
+			if (cpuHealth[i] <= 0) {
+				cpuHealth[i] = 0;
+				isCPUDead[i] = true; 
+//				System.out.println(whichPokemon(cpuPokemon[i]) + " fainted!");
+				
+
+				userMessagePanel.setVisible(true);
+				userMessagePanel.setVisible(true);
+				int pokemonAct = ++CPUActive;
+				CPUActive = pokemonAct%3; 
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[i]) + " fainted! <br>COMPUTER switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
+				userMessageLabel.setVisible(true);
+				faintedSwitch(); 
+				UpdateHealth();
+				UpdateImage();
+			} 
 		} else {
-			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("COMPUTER switched to "+whichPokemon(cpuPokemon[CPUActive])+"!");
-			userMessageLabel.setVisible(true);	
+			if (playerHealth[i] <= 0) {
+				playerHealth[i] = 0;
+				isPlayerDead[i] = true;
+//				System.out.println(whichPokemon(playerPokemon[i]) + " fainted!");
+				
 
-			userMessagePanel.setVisible(true);
-		}
-	}
-	
-	public void actionPerformed(ActionEvent event){ // button pressed
-		playercountdown = DISPLAY_TIME;
-		if(isPlayerTurn && !didIWin && !didILose) {
-			if(event.getSource() == normButton){ // Normal move
-				isNormalMove = true; 
-				DamageMessage();
+				userMessagePanel.setVisible(true);
+				userMessagePanel.setVisible(true);
+				int pokemonAct = ++PlayerActive;
+				PlayerActive = pokemonAct%3;
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[i]) + " fainted! <br>You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
+				userMessageLabel.setVisible(true);
+				faintedSwitch(); 
 				UpdateHealth();
-				if (isPlayerTurn) {
-					isPokemonFainted(CPUActive);
-				} else {
-					isPokemonFainted(PlayerActive);
-				}
-				isAllDead();
-				waiting = false; 
-//				if(!didIWin) {
-//					cpuTurn(); 
-//				}
-			}else if(event.getSource() == typeButton){ // Type move
-				isNormalMove = false; 
-				DamageMessage();
-				UpdateHealth();
-				if (isPlayerTurn) {
-					isPokemonFainted(CPUActive);
-				} else {
-					isPokemonFainted(PlayerActive);
-				}
-
-				isAllDead();
-				waiting = false; 
-//				if(!didIWin) {
-//					cpuTurn(); 
-//				}
-			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
-				PlayerActive = 0;
-				switchPokemon();
-				waiting = false; 
-//				if(!didIWin) {
-//					cpuTurn(); 
-//				}
-			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
-				PlayerActive = 1;
-				switchPokemon();
-				waiting = false; 
-//				if(!didIWin) {
-//					cpuTurn(); 
-//				} 
-			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
-				PlayerActive = 2;
-				switchPokemon();
-				waiting = false; 
-//				if(!didIWin) {
-//					cpuTurn(); 
-//				}
+				UpdateImage();
+//				myTimer.schedule(this, TIME);
 			}
 		}
+			
 	}
 	
 	protected void switchPokemon() { // Code to switch the graphics when the pokemon changes 
@@ -592,6 +548,22 @@ class Controller extends TimerTask implements ActionListener{
 		}
 	}
 	
+	protected void SwitchMessage(){ // message that appears when the player chooses to change their pokemon
+		if(isPlayerTurn) {
+			userMessageLabel.setVisible(false);
+			userMessageLabel.setText("You switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
+			userMessageLabel.setVisible(true);	
+	
+			userMessagePanel.setVisible(true);
+		} else {
+			userMessageLabel.setVisible(false);
+			userMessageLabel.setText("COMPUTER switched to "+whichPokemon(cpuPokemon[CPUActive])+"!");
+			userMessageLabel.setVisible(true);	
+
+			userMessagePanel.setVisible(true);
+		}
+	}
+	
 	protected void UpdateHealth(){
 		playerPanel.setVisible(false);
 		CPUPanel.setVisible(false);
@@ -633,33 +605,44 @@ class Controller extends TimerTask implements ActionListener{
 			gameContentPane.add(player1);
 			player1.setVisible(true);
 		}
-	}
+	}	
 	
-	
-	protected String pokemonHit(){ //Runs when the player chooses to attack the cpu
+	protected void isAllDead() {
 		if (isPlayerTurn) {
-			double damageDone = game.getDamage();
-			double efficiency; 
-			if (!isNormalMove) {
-				efficiency = attackEfficiency[playerPokemon[PlayerActive]][cpuPokemon[CPUActive]];
-			} else {
-				efficiency = attackEfficiency[NORMAL][cpuPokemon[CPUActive]];
+			didIWin = true;
+			for (int i = 0; i < ASSIGNED_POKEMON; i++) {
+				if (!isCPUDead[i]) {
+					didIWin = false;
+				}
 			}
-			cpuHealth[CPUActive] -= damageDone*efficiency;
-			return " (-"+damageDone*efficiency+")";
+			
+			if (didIWin) {
+//				System.out.println("Player defeated! You won!");
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("Player defeated! You won!");
+				userMessageLabel.setVisible(true);
+
+				userMessagePanel.setVisible(true);
+				isPlayerTurn = false; 
+			}
 		} else {
-			double damageDone = game.getDamage();
-			double efficiency; 
-			if (!isNormalMove) {
-				efficiency = attackEfficiency[cpuPokemon[CPUActive]][playerPokemon[PlayerActive]];
-			} else {
-				efficiency = attackEfficiency[cpuPokemon[CPUActive]][NORMAL];
+			didILose = true;
+			for (int i = 0; i < ASSIGNED_POKEMON; i++) {
+				if(!isPlayerDead[i]) {
+					didILose = false; 
+				}
 			}
-			playerHealth[PlayerActive] -= damageDone*efficiency ;
-			return " (-"+damageDone*efficiency+")";
+			if (didILose) {
+//				System.out.println("You have been defeated! You lost!");
+				userMessageLabel.setVisible(false);
+				userMessageLabel.setText("You have been defeated! You lost!");
+				userMessageLabel.setVisible(true);
+
+				userMessagePanel.setVisible(true);
+			}
 		}
 	}
-	
+
 	protected void cpuTurn() {
 
 //		System.out.println("I MADE IT TO THE CPU\'S TURN");
@@ -675,6 +658,78 @@ class Controller extends TimerTask implements ActionListener{
 		isAllDead(); 
 	}
 
+	public void actionPerformed(ActionEvent event){ // button pressed
+		playercountdown = DISPLAY_TIME;
+		
+		if(event.getSource() == goButton){
+			isGameReady = true;
+			StartFrame.setVisible(false);
+			userMessagePanel.setVisible(true);
+			fightJPanel.setVisible(true);
+			switchJPanel.setVisible(true);
+			gameJFrame.setVisible(true); 
+		}
+		
+		if(isPlayerTurn && !didIWin && !didILose) {
+			if(event.getSource() == normButton){ // Normal move
+				isNormalMove = true; 
+				DamageMessage();
+				UpdateHealth();
+				if (isPlayerTurn) {
+					isPokemonFainted(CPUActive);
+				} else {
+					isPokemonFainted(PlayerActive);
+				}
+				isAllDead();
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
+			}else if(event.getSource() == typeButton){ // Type move
+				isNormalMove = false; 
+				DamageMessage();
+				UpdateHealth();
+				if (isPlayerTurn) {
+					isPokemonFainted(CPUActive);
+				} else {
+					isPokemonFainted(PlayerActive);
+				}
+
+				isAllDead();
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
+			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
+				PlayerActive = 0;
+				switchPokemon();
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
+			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
+				PlayerActive = 1;
+				switchPokemon();
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				} 
+			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
+				PlayerActive = 2;
+				switchPokemon();
+				waiting = false; 
+//				if(!didIWin) {
+//					cpuTurn(); 
+//				}
+			}
+		}
+	}
+	
+	@Override
+	public void itemStateChanged(ItemEvent event) {
+		// TODO Auto-generated method stub
+		CurrentButton = (JRadioButton) event.getSource();
+	}
 	
 	public void run(){
 		if(isGameReady) {
@@ -712,11 +767,12 @@ class Controller extends TimerTask implements ActionListener{
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException  {
-		
 		typeMatrix(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
 
 	}
+
+	
 	
 }
