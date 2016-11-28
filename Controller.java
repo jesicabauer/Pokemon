@@ -44,7 +44,6 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	public final static int PSYCHIC = 6; 
 	public final static int STEEL = 7; 
 	public final static int FAIRY = 8;
-	public final static int MAX_HEALTH = 50; 
 	
 	PokemonSuper game = new PokemonSuper();
 	InstantiateArrays myArrays = new InstantiateArrays();
@@ -68,8 +67,8 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	public static double playerHealth[] = new double[ASSIGNED_POKEMON];
 	public static double cpuHealth[] = new double[ASSIGNED_POKEMON];
 	
-	public static double CPU_MAX_HEALTH = 50;
-	public static double PLAYER_MAX_HEALTH = 100;
+	public static double CPU_MAX_HEALTH;
+	public static double PLAYER_MAX_HEALTH;
 	
 	public static boolean isDead[] = new boolean[NUM_OF_TYPES];
 	public static boolean isPlayerDead[] = new boolean[ASSIGNED_POKEMON];
@@ -140,6 +139,8 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	private JRadioButton HardButton = new JRadioButton();
 	private JButton goButton = new JButton();
 	private JRadioButton CurrentButton;
+	private String PlayerName;
+	private String CPUName;
 	
     public Controller()  {
     	
@@ -148,8 +149,65 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
     	StartScreen();
 //    	if(isGameReady){
     	shufflePokemon(); 
-		assignPokemon(); 
-    	
+	}
+
+        
+   
+    private void StartScreen(){
+		
+		ButtonGroup Buttons = new ButtonGroup();
+		
+		EasyButton.setText("Easy");
+		EasyButton.addItemListener(this);
+		HardButton.setText("Hard");
+		HardButton.addItemListener(this);
+		JPanel radioPanel = new JPanel(); 
+		radioPanel.add(EasyButton);
+		radioPanel.add(HardButton);
+		
+		Buttons.add(EasyButton);
+		Buttons.add(HardButton);
+		
+
+		goButton.setText("Start Game!");
+		goButton.addActionListener(this);
+		
+		StartContainer.setLayout(new GridLayout(4,1));
+		StartContainer.add(myName);
+		StartContainer.add(radioPanel);
+		StartContainer.add(RivalName);
+		StartContainer.add(goButton);
+		StartContainer.setVisible(true);
+		StartFrame.setSize(400,400);
+		StartFrame.setLocationRelativeTo(null);
+		StartFrame.add(StartContainer);
+		StartFrame.setVisible(true);
+		isGameReady = false;
+	}
+    
+    private void StartGame(){
+		isGameReady = true;
+		StartFrame.setVisible(false);
+		
+		PlayerName = myName.getText();
+		CPUName = RivalName.getText();
+		
+		if(CurrentButton.equals(HardButton)){
+			PLAYER_MAX_HEALTH = 50;
+			CPU_MAX_HEALTH = 50;
+			GameDisplay();
+		}else{
+			PLAYER_MAX_HEALTH = 100;
+			CPU_MAX_HEALTH = 50;
+			GameDisplay();
+		}
+
+    }
+    
+    public void GameDisplay(){
+    	shufflePokemon();
+    	assignPokemon();
+
     	gameJFrame = new JFrame("Pokemon Go!");
     	gameJFrame.setSize(jframeWidth,jframeHeight);
     	gameJFrame.setLocationRelativeTo(null);
@@ -227,45 +285,14 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		gameContentPane.add(CPUPanel);
 		gameContentPane.add(userMessagePanel);
 		
-//		userMessagePanel.setVisible(true);
-//		fightJPanel.setVisible(true);
-//		switchJPanel.setVisible(true);
-//		gameJFrame.setVisible(true); 
-//    	}
-		
-    }
-    
-    private void StartScreen(){
-		
-		ButtonGroup Buttons = new ButtonGroup();
-		
-		EasyButton.setText("Easy");
-		EasyButton.addItemListener(this);
-		HardButton.setText("Hard");
-		HardButton.addItemListener(this);
-		JPanel radioPanel = new JPanel(); 
-		radioPanel.add(EasyButton);
-		radioPanel.add(HardButton);
-		
-		Buttons.add(EasyButton);
-		Buttons.add(HardButton);
+		userMessagePanel.setVisible(true);
+		fightJPanel.setVisible(true);
+		switchJPanel.setVisible(true);
+		gameJFrame.setVisible(true); 
 		
 
-		goButton.setText("Start Game!");
-		goButton.addActionListener(this);
-		
-		StartContainer.setLayout(new FlowLayout());
-		StartContainer.add(myName);
-		StartContainer.add(radioPanel);
-		StartContainer.add(RivalName);
-		StartContainer.add(goButton);
-		StartContainer.setVisible(true);
-		StartFrame.setSize(400,400);
-		StartFrame.add(StartContainer);
-		StartFrame.setVisible(true);
-		isGameReady = false;
-	}
-	
+    }
+
 	public static void typeMatrix() throws FileNotFoundException {
 		sc = new Scanner(new File("type-matrix.txt"));
 		for (int i = 0; i < NUM_OF_TYPES; i++) {
@@ -452,7 +479,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[i]) + " fainted! <br>COMPUTER switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
+				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -470,7 +497,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3;
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[i]) + " fainted! <br>You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
+				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[i]) + " fainted! <br>"+PlayerName+" switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -496,7 +523,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 			normButton.setText("<html><center>" + myArrays.getNormMove(playerPokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
 			normButton.setVisible(true);
 			playerPanel.setVisible(false);
-			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],50);
+			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],PLAYER_MAX_HEALTH);
 			playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
 			playerPanel.setBackground(WHITE);
 			playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(playerPokemon[PlayerActive])));
@@ -551,13 +578,13 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	protected void SwitchMessage(){ // message that appears when the player chooses to change their pokemon
 		if(isPlayerTurn) {
 			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("You switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
+			userMessageLabel.setText(PlayerName+" switched to "+whichPokemon(playerPokemon[PlayerActive])+"!");
 			userMessageLabel.setVisible(true);	
 	
 			userMessagePanel.setVisible(true);
 		} else {
 			userMessageLabel.setVisible(false);
-			userMessageLabel.setText("COMPUTER switched to "+whichPokemon(cpuPokemon[CPUActive])+"!");
+			userMessageLabel.setText(CPUName+" switched to "+whichPokemon(cpuPokemon[CPUActive])+"!");
 			userMessageLabel.setVisible(true);	
 
 			userMessagePanel.setVisible(true);
@@ -662,12 +689,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		playercountdown = DISPLAY_TIME;
 		
 		if(event.getSource() == goButton){
-			isGameReady = true;
-			StartFrame.setVisible(false);
-			userMessagePanel.setVisible(true);
-			fightJPanel.setVisible(true);
-			switchJPanel.setVisible(true);
-			gameJFrame.setVisible(true); 
+//			if(CurrentButton.isSelected()){
+			StartGame();
+			System.out.println(PlayerName+" "+ CPUName);
+//			}else {
+//				System.out.println("Please choose a difficulty");
+//			}
 		}
 		
 		if(isPlayerTurn && !didIWin && !didILose) {
