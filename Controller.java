@@ -133,7 +133,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	
 	private JFrame StartFrame = new JFrame();
 	private Container StartContainer = new Container();
-	private JTextArea myName = new JTextArea("Enter Your Name");
+	private JTextArea myName = new JTextArea("Enter Your Name"); 
 	private JTextArea RivalName = new JTextArea("Enter Your Rival's Name");
 	private JRadioButton EasyButton = new JRadioButton();
 	private JRadioButton HardButton = new JRadioButton();
