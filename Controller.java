@@ -203,8 +203,8 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		isGameReady = true;
 		StartFrame.setVisible(false);
 		
-		PlayerName = myName.getText();
-		CPUName = RivalName.getText();
+		PlayerName = myName.getText().toUpperCase();
+		CPUName = RivalName.getText().toUpperCase();
 		
 		if(CurrentButton.equals(HardButton)){
 			PLAYER_MAX_HEALTH = 50;
@@ -422,20 +422,20 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		userMessageLabel.setVisible(false);
 		if (isPlayerTurn) {
 			if (!isNormalMove) {		
-				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
+				userMessageLabel.setText("<html>Your " + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
 			
 			} else {
-				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getNormMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
+				userMessageLabel.setText("<html>Your " + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getNormMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
 			}
 			userMessageLabel.setVisible(true);
 
 			userMessagePanel.setVisible(true);
 		} else {
 			if (!isNormalMove) {		
-				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[CPUActive])+" used " + myArrays.getMove(cpuPokemon[CPUActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
+				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(cpuPokemon[CPUActive])+" used " + myArrays.getMove(cpuPokemon[CPUActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
 //				System.out.println("CPU used a type move!");
 			} else {
-				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[CPUActive])+" used " + myArrays.getNormMove(cpuPokemon[CPUActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
+				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(cpuPokemon[CPUActive])+" used " + myArrays.getNormMove(cpuPokemon[CPUActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
 //				System.out.println("CPU used a normal move!");
 			}
 			userMessageLabel.setVisible(true);
