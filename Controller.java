@@ -138,7 +138,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	private JRadioButton EasyButton = new JRadioButton();
 	private JRadioButton HardButton = new JRadioButton();
 	private JButton goButton = new JButton();
-	private JRadioButton CurrentButton;
+	private JRadioButton CurrentButton = EasyButton;
 	private String PlayerName;
 	private String CPUName;
 	
@@ -159,6 +159,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		
 		EasyButton.setText("Easy");
 		EasyButton.addItemListener(this);
+		EasyButton.setSelected(true);
 		HardButton.setText("Hard");
 		HardButton.addItemListener(this);
 		JPanel radioPanel = new JPanel(); 
