@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -29,8 +30,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 class Controller extends TimerTask implements ActionListener, ItemListener{
-	
-	
 	
 	public final static int NUM_OF_TYPES = 9; 
 	public final static int NUM_OF_POKEMON = 8; 
@@ -133,8 +132,8 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	
 	private JFrame StartFrame = new JFrame();
 	private Container StartContainer = new Container();
-	private JTextArea myName = new JTextArea("Enter Your Name"); 
-	private JTextArea RivalName = new JTextArea("Enter Your Rival's Name");
+	private JTextArea myName = new JTextArea(); 
+	private JTextArea RivalName = new JTextArea();
 	private JRadioButton EasyButton = new JRadioButton();
 	private JRadioButton HardButton = new JRadioButton();
 	private JButton goButton = new JButton();
@@ -154,35 +153,49 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
         
    
     private void StartScreen(){
-		
+    	JLabel background = new JLabel();
+    	background.setIcon( new ImageIcon("startscreen.png") );
+    	background.setVisible(true);
+    	background.setLayout( new BorderLayout() );
+    	StartFrame.setContentPane( background );
+    	
+    	
 		ButtonGroup Buttons = new ButtonGroup();
 		
 		EasyButton.setText("Easy");
 		EasyButton.addItemListener(this);
 		EasyButton.setSelected(true);
+		EasyButton.setBounds(76,345,55,48);
+		EasyButton.setBackground(WHITE);
 		HardButton.setText("Hard");
 		HardButton.addItemListener(this);
-		JPanel radioPanel = new JPanel(); 
-		radioPanel.add(EasyButton);
-		radioPanel.add(HardButton);
+		HardButton.setBounds(267,344,55,50);
+		HardButton.setBackground(WHITE);
+		
+		StartContainer.add(EasyButton);
+		StartContainer.add(HardButton);
 		
 		Buttons.add(EasyButton);
 		Buttons.add(HardButton);
 		
-
 		goButton.setText("Start Game!");
 		goButton.addActionListener(this);
+		goButton.setBounds(49,417,301,51);
+		goButton.setBackground(WHITE);
 		
-		StartContainer.setLayout(new GridLayout(4,1));
+		myName.setBounds(197,191,153,50);
+		RivalName.setBounds(197,267,153,50);
+		
 		StartContainer.add(myName);
-		StartContainer.add(radioPanel);
 		StartContainer.add(RivalName);
 		StartContainer.add(goButton);
-		StartContainer.setVisible(true);
-		StartFrame.setSize(400,400);
-		StartFrame.setLocationRelativeTo(null);
+	 
 		StartFrame.add(StartContainer);
-		StartFrame.setVisible(true);
+		StartFrame.setSize(410,520);
+    	StartFrame.setLocationRelativeTo(null);
+    	StartFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	StartFrame.setVisible(true);
+    	StartContainer.setVisible(true);
 		isGameReady = false;
 	}
     
@@ -286,9 +299,10 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		gameContentPane.add(CPUPanel);
 		gameContentPane.add(userMessagePanel);
 		
-		userMessagePanel.setVisible(true);
+		userMessagePanel.setVisible(false);
 		fightJPanel.setVisible(true);
 		switchJPanel.setVisible(true);
+		gameJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameJFrame.setVisible(true); 
 		
 
