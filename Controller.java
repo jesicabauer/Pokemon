@@ -494,7 +494,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
+				userMessageLabel.setText("<html>Your " + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -512,7 +512,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3;
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + whichPokemon(playerPokemon[i]) + " fainted! <br>"+PlayerName+" switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
+				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(playerPokemon[i]) + " fainted! <br>"+PlayerName+" switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -587,6 +587,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 			pc1.setBounds(jframeWidth-imageWidth,0,imageWidth,imageHeight);
 			gameContentPane.add(pc1);
 			pc1.setVisible(true);
+			typeButton.setVisible(false);
+			typeButton.setText("<html><center>" + myArrays.getMove(playerPokemon[PlayerActive]) + "<br><font size=1>(" + myArrays.getTypeName(playerPokemon[PlayerActive]) + ")</font></center></html>");
+			typeButton.setVisible(true);
+			normButton.setVisible(false);
+			normButton.setText("<html><center>" + myArrays.getNormMove(playerPokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
+			normButton.setVisible(true);
 		}
 	}
 	
@@ -822,6 +828,10 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		typeMatrix(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
+		// Credit to Kyle for writing the sound class
+		Sound mySound = new Sound(); 
+		mySound.SetMusic("music.wav");
+		mySound.playSound(true); 
 
 	}
 
