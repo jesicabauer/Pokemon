@@ -141,6 +141,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	private String PlayerName;
 	private String CPUName;
 	
+	private JFrame EndFrame = new JFrame();
+	private Container EndContainer = new Container();
+	private JButton AgainButton = new JButton();
+	private JButton ExitButton = new JButton();
+	private JLabel EndLabel = new JLabel();
+	
     public Controller()  {
     	
     	myTimer.schedule(this, 0, DECREMENT);
@@ -148,6 +154,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
     	StartScreen();
 //    	if(isGameReady){
     	shufflePokemon(); 
+    	EndScreen();
 	}
 
         
@@ -699,7 +706,37 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		}
 		isAllDead(); 
 	}
-
+	public void EndScreen(){
+		EndFrame.setSize(400, 500);
+			
+		AgainButton.setText("Play Again");
+		AgainButton.addActionListener(this);
+		AgainButton.setBounds(100, 100, 100, 100);
+		
+		ExitButton.setText("Quit");
+		ExitButton.addActionListener(this);
+		ExitButton.setBounds(200, 100, 100, 100);
+		
+		
+		if (didIWin){
+			EndLabel.setText("YOU WON");
+		} else{
+			EndLabel.setText("You Lost");
+		}
+		EndLabel.setBounds(100, 300, 300, 100);
+		EndLabel.setBackground(WHITE);
+		
+		EndContainer.add(EndLabel);
+		EndContainer.add(AgainButton);
+		EndContainer.add(ExitButton);
+		
+		
+		EndFrame.add(EndContainer);
+		EndFrame.setVisible(true);
+		
+	}
+	
+	
 	public void actionPerformed(ActionEvent event){ // button pressed
 		playercountdown = DISPLAY_TIME;
 		
