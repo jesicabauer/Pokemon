@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import javax.swing.SwingConstants;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class Controller extends TimerTask implements ActionListener, ItemListener{
+class Controller extends TimerTask implements ActionListener, ItemListener, MouseListener{
 	
 	public final static int NUM_OF_TYPES = 9; 
 	public final static int NUM_OF_POKEMON = 8; 
@@ -125,7 +127,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 	
 	protected Timer myTimer = new Timer();
 
-	private static final int DISPLAY_TIME = 2000;
+	private static final int DISPLAY_TIME = 5000;
 	private static final int DECREMENT = 100; 
 	private static int playercountdown = 0; 
 	private static int cpucountdown = 0; 
@@ -225,6 +227,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
     	gameJFrame = new JFrame("Pokemon Go!");
     	gameJFrame.setSize(jframeWidth,jframeHeight);
     	gameJFrame.setLocationRelativeTo(null);
+    	gameJFrame.addMouseListener(this); 
     	
     	gameContentPane = gameJFrame.getContentPane(); 
     	gameContentPane.setLayout(null);
@@ -244,7 +247,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
     	typeButton.setBackground(WHITE);
     	fightJPanel.add(normButton);
     	fightJPanel.add(typeButton); 
-  	
+    	
     	switchJPanel = new JPanel(); 
     	switchJPanel.setBackground(WHITE);
     	switchJPanel.setBounds(0,plPokePos+imageWidth+90,385,90);
@@ -494,7 +497,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>Your " + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
+				userMessageLabel.setText("<html>Your " + whichPokemon(playerPokemon[i]) + " fainted! <br>"+PlayerName+" switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -512,7 +515,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3;
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(playerPokemon[i]) + " fainted! <br>"+PlayerName+" switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
+				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -538,7 +541,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 			normButton.setText("<html><center>" + myArrays.getNormMove(playerPokemon[PlayerActive]) + "<br><font size=1>(NORMAL)</font></center></html>");
 			normButton.setVisible(true);
 			playerPanel.setVisible(false);
-			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],PLAYER_MAX_HEALTH);
+			playerPanel = CreatePlayerIDBoxes(playerPokemon[PlayerActive],playerHealth[PlayerActive]);
 			playerPanel.setBounds(125, 210, jframeWidth-imageWidth*2, 50);
 			playerPanel.setBackground(WHITE);
 			playerPanel.setBorder(BorderFactory.createMatteBorder(matteTop,matteBottom,matteTop,matteBottom,myArrays.getColor(playerPokemon[PlayerActive])));
@@ -705,7 +708,15 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		}
 		isAllDead(); 
 	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("YOU CLICKED");
+	}
+	
 
+	
 	public void actionPerformed(ActionEvent event){ // button pressed
 		playercountdown = DISPLAY_TIME;
 		
@@ -749,27 +760,48 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 //					cpuTurn(); 
 //				}
 			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
+				if (PlayerActive == 0) {
+					userMessageLabel.setVisible(false);
+					userMessageLabel.setText("That Pokemon is already out!");
+					userMessageLabel.setVisible(true);	
+					userMessagePanel.setVisible(true);
+				} else {
 				PlayerActive = 0;
 				switchPokemon();
 				waiting = false; 
 //				if(!didIWin) {
 //					cpuTurn(); 
 //				}
+				}
 			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
+				if (PlayerActive == 1) {
+					userMessageLabel.setVisible(false);
+					userMessageLabel.setText("That Pokemon is already out!");
+					userMessageLabel.setVisible(true);	
+					userMessagePanel.setVisible(true);
+				} else {
 				PlayerActive = 1;
 				switchPokemon();
 				waiting = false; 
 //				if(!didIWin) {
 //					cpuTurn(); 
 //				} 
+				}
 			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
+				if (PlayerActive == 2) {
+					userMessageLabel.setVisible(false);
+					userMessageLabel.setText("That Pokemon is already out!");
+					userMessageLabel.setVisible(true);	
+					userMessagePanel.setVisible(true);
+				} else {
 				PlayerActive = 2;
 				switchPokemon();
 				waiting = false; 
 //				if(!didIWin) {
 //					cpuTurn(); 
 //				}
-			}
+				}
+			} 
 		}
 	}
 	
@@ -833,6 +865,32 @@ class Controller extends TimerTask implements ActionListener, ItemListener{
 		mySound.SetMusic("music.wav");
 		mySound.playSound(true); 
 
+	}
+
+
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
