@@ -1,5 +1,7 @@
 package game;
 
+// CHECK WIN CONDITIONS ON END SCREEN
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -78,8 +80,6 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	public static JLabel getSprite[] = new JLabel[NUM_OF_TYPES];
 	public static ImageIcon getButtonSprite[] = new ImageIcon[NUM_OF_TYPES];
 	
-	
-	
 	public static String getMove[] = new String[NUM_OF_TYPES];
 	public static String getNormMove[] = new String[NUM_OF_TYPES];
 	public static String getTypeName[] = new String[NUM_OF_TYPES];
@@ -105,8 +105,8 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
     
 	public static Scanner sc;
 	
-	public int jframeWidth = 400; 
-	public int jframeHeight = 500; 
+	public int jframeWidth = 390; 
+	public int jframeHeight = 490; 
 	public int imageWidth = 80; 
 	public int imageHeight = 80; 
 	public int plPokePos = 200; 
@@ -143,6 +143,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	private String PlayerName;
 	private String CPUName;
 	
+	private JFrame EndFrame = new JFrame();
+	private Container EndContainer = new Container();
+	private JButton AgainButton = new JButton();
+	private JButton ExitButton = new JButton();
+	private JLabel EndLabel = new JLabel();
+	
     public Controller()  {
     	
     	myTimer.schedule(this, 0, DECREMENT);
@@ -150,6 +156,8 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
     	StartScreen();
 //    	if(isGameReady){
     	shufflePokemon(); 
+    	gameJFrame = new JFrame("Pokemon Go!");
+ 
 	}
 
         
@@ -167,11 +175,11 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		EasyButton.setText("Easy");
 		EasyButton.addItemListener(this);
 		EasyButton.setSelected(true);
-		EasyButton.setBounds(76,345,55,48);
+		EasyButton.setBounds(76,335,55,48);
 		EasyButton.setBackground(WHITE);
 		HardButton.setText("Hard");
 		HardButton.addItemListener(this);
-		HardButton.setBounds(267,344,55,50);
+		HardButton.setBounds(267,334,55,50);
 		HardButton.setBackground(WHITE);
 		
 		StartContainer.add(EasyButton);
@@ -182,27 +190,29 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		
 		goButton.setText("Start Game!");
 		goButton.addActionListener(this);
-		goButton.setBounds(49,417,301,51);
+		goButton.setBounds(49,407,301,51);
 		goButton.setBackground(WHITE);
 		
-		myName.setBounds(197,191,153,50);
-		RivalName.setBounds(197,267,153,50);
+		myName.setBounds(197,181,153,50);
+		RivalName.setBounds(197,257,153,50);
 		
 		StartContainer.add(myName);
 		StartContainer.add(RivalName);
 		StartContainer.add(goButton);
 	 
 		StartFrame.add(StartContainer);
-		StartFrame.setSize(410,520);
+		StartFrame.setSize(jframeWidth,jframeHeight);
     	StartFrame.setLocationRelativeTo(null);
     	StartFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	StartFrame.setVisible(true);
+    	StartFrame.setResizable(false);
     	StartContainer.setVisible(true);
 		isGameReady = false;
 	}
     
     private void StartGame(){
-		isGameReady = true;
+    	
+		
 		StartFrame.setVisible(false);
 		
 		PlayerName = myName.getText().toUpperCase();
@@ -217,17 +227,17 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 			CPU_MAX_HEALTH = 50;
 			GameDisplay();
 		}
-
     }
     
     public void GameDisplay(){
     	shufflePokemon();
     	assignPokemon();
-
-    	gameJFrame = new JFrame("Pokemon Go!");
+    
     	gameJFrame.setSize(jframeWidth,jframeHeight);
     	gameJFrame.setLocationRelativeTo(null);
     	gameJFrame.addMouseListener(this); 
+    	gameJFrame.setResizable(false);
+
     	
     	gameContentPane = gameJFrame.getContentPane(); 
     	gameContentPane.setLayout(null);
@@ -308,6 +318,9 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		gameJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameJFrame.setVisible(true); 
 		
+		isPlayerTurn = true; 
+		isGameReady = true;
+//		isPlayerTurn = true; 
 
     }
 
@@ -497,7 +510,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>Your " + whichPokemon(playerPokemon[i]) + " fainted! <br>"+PlayerName+" switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
+				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -515,7 +528,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3;
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
+				userMessageLabel.setText("<html>" + "Your " + whichPokemon(playerPokemon[i]) + " fainted! <br> You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -675,6 +688,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 
 				userMessagePanel.setVisible(true);
 				isPlayerTurn = false; 
+				EndScreen();
 			}
 		} else {
 			didILose = true;
@@ -690,6 +704,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 				userMessageLabel.setVisible(true);
 
 				userMessagePanel.setVisible(true);
+				EndScreen();
 			}
 		}
 	}
@@ -708,25 +723,76 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		}
 		isAllDead(); 
 	}
+
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("YOU CLICKED");
+		isGameReady = false;
+		playercountdown = 0;
+		cpucountdown = 0; 
+		isGameReady = true; 
+	}
+	
+	public void EndScreen(){
+		gameJFrame.setVisible(false);
+		EndFrame.setSize(jframeWidth, jframeHeight);
+		JLabel background = new JLabel();
+    	background.setIcon( new ImageIcon("winscreen.png") );
+    	background.setVisible(true);
+    	background.setLayout( new BorderLayout() );
+    	EndFrame.setContentPane( background );
+    	EndFrame.setLocationRelativeTo(null);
+    	EndFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	EndFrame.setResizable(false);
+			
+		AgainButton.setText("Play Again");
+		AgainButton.addActionListener(this);
+		AgainButton.setBounds(50, 304, 300, 50);
+		AgainButton.setBackground(WHITE);
+		
+		ExitButton.setText("Quit");
+		ExitButton.addActionListener(this);
+		ExitButton.setBounds(50, 394, 300, 50);
+		ExitButton.setBackground(WHITE);
+		
+		
+		if (didIWin){
+			EndLabel.setText("<html><center> Congratulations, " + PlayerName + "! You defeated RIVAL " + CPUName + "! </font></center></html>");
+		} 
+		if (didILose) {
+			EndLabel.setText("<html><center> Oh no, " + PlayerName + "! You have been defeated by RIVAL " + CPUName + "! </font></center></html>");
+		}
+		
+		EndLabel.setBounds(100, 225, 200, 50);
+		EndLabel.setBackground(WHITE);
+		
+		EndContainer.add(EndLabel, SwingConstants.CENTER);
+		EndContainer.add(AgainButton);
+		EndContainer.add(ExitButton);
+		
+		
+		EndFrame.add(EndContainer);
+		EndFrame.setVisible(true);
+		
 	}
 	
 
-	
 	public void actionPerformed(ActionEvent event){ // button pressed
 		playercountdown = DISPLAY_TIME;
 		
 		if(event.getSource() == goButton){
-//			if(CurrentButton.isSelected()){
 			StartGame();
 			System.out.println(PlayerName+" "+ CPUName);
-//			}else {
-//				System.out.println("Please choose a difficulty");
-//			}
+
+		} else if(event.getSource() == AgainButton){
+			 
+			EndFrame.setVisible(false);
+			didIWin = false;
+			didILose = false; 
+			Controller myController = new Controller();
+			
+		}else if(event.getSource()== ExitButton){
+			System.exit(0);
 		}
 		
 		if(isPlayerTurn && !didIWin && !didILose) {
@@ -807,7 +873,6 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	
 	@Override
 	public void itemStateChanged(ItemEvent event) {
-		// TODO Auto-generated method stub
 		CurrentButton = (JRadioButton) event.getSource();
 	}
 	
@@ -860,7 +925,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		typeMatrix(); 
 		@SuppressWarnings("unused")
 		Controller myController = new Controller(); 
-		// Credit to Kyle for writing the sound class
+		// Credit to Kyle and Natalie for writing the sound class
 		Sound mySound = new Sound(); 
 		mySound.SetMusic("music.wav");
 		mySound.playSound(true); 
@@ -870,28 +935,13 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
+	public void mouseEntered(MouseEvent arg0) {}
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent arg0) {}
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		
-	}
-
+	public void mousePressed(MouseEvent arg0) {}
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent arg0) {}
 
 	
 	
