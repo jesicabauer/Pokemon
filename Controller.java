@@ -219,12 +219,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		CPUName = RivalName.getText().toUpperCase();
 		
 		if(CurrentButton.equals(HardButton)){
-			PLAYER_MAX_HEALTH = 50;
-			CPU_MAX_HEALTH = 50;
+			PLAYER_MAX_HEALTH = 75;
+			CPU_MAX_HEALTH = 75;
 			GameDisplay();
 		}else{
 			PLAYER_MAX_HEALTH = 100;
-			CPU_MAX_HEALTH = 50;
+			CPU_MAX_HEALTH = 100;
 			GameDisplay();
 		}
     }
@@ -713,7 +713,11 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 
 //		System.out.println("I MADE IT TO THE CPU\'S TURN");
 		cpucountdown = DISPLAY_TIME; 
-		isNormalMove = cpu.cpuMove();
+		if (CurrentButton == HardButton) {
+			isNormalMove = cpu.cpuMoveHard(attackEfficiency, playerPokemon, PlayerActive, cpuPokemon, CPUActive);
+		} else {
+			isNormalMove = cpu.cpuMove(); 
+		}
 		DamageMessage();
 		UpdateHealth();
 		if (isPlayerTurn) {
