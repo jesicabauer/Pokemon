@@ -1,6 +1,5 @@
 package game;
 
-// CHECK WIN CONDITIONS ON END SCREEN
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -164,9 +163,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
     	
     	Object stringArray[] = {iknowString, teachmeString};
     	
-    	int returnvalue = JOptionPane.showOptionDialog(null, "Continue printing?", "Select an Option",
+    	int returnvalue = JOptionPane.showOptionDialog(null, "Have you played Pokemon before?", "Select an Option",
     	        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray,
     	        stringArray[0]);
+    	if (returnvalue < 0) {
+    		System.exit(0);
+    	}
     	if(stringArray[returnvalue].equals(iknowString)){
 	    	StartScreen();
 	//    	if(isGameReady){
@@ -174,20 +176,21 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	    	gameJFrame = new JFrame("Pokemon Showdown!");
     	}else if(stringArray[returnvalue].equals(teachmeString)){
     		Instructions();	
-    	}
+    	} 
  
 	}
     private void Instructions(){
-    	InstructionFrame.setSize(800, 500);
+    	InstructionFrame.setSize(806, 529);
     	JLabel background = new JLabel();
-    	background.setIcon(new ImageIcon(""));
+    	background.setIcon(new ImageIcon("instructions.png"));
     	background.setVisible(true);
     	background.setLayout(new BorderLayout());
-    	InstructionFrame.add(background);
+    	InstructionFrame.setContentPane(background);
     	
     	NextButton.setText("Got It!");
     	NextButton.addActionListener(this);
-    	NextButton.setBounds(267,334,100,50);
+    	NextButton.setBounds(581,437,202,51);
+    	NextButton.setBackground(WHITE);
     	InstructionContainer.add(NextButton);
     	
 
@@ -196,6 +199,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
     	InstructionContainer.setVisible(true);
     	InstructionFrame.setVisible(true);
     	InstructionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	InstructionFrame.setResizable(false);
     }
    
     private void StartScreen(){
@@ -833,7 +837,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		
 		if(event.getSource() == goButton){
 			StartGame();
-			System.out.println(PlayerName+" "+ CPUName);
+//			System.out.println(PlayerName+" "+ CPUName);
 
 		} else if(event.getSource() == AgainButton){
 			 
