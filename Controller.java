@@ -25,6 +25,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -150,18 +151,52 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	private JButton ExitButton = new JButton();
 	private JLabel EndLabel = new JLabel();
 	
+	private JFrame InstructionFrame = new JFrame();
+	private Container InstructionContainer = new Container();
+	private JButton NextButton = new JButton();
+	
+	private String iknowString = "I know how to play!";
+	private String teachmeString = "Teach me how to Play!";
+	
     public Controller()  {
     	
     	myTimer.schedule(this, 0, DECREMENT);
     	
-    	StartScreen();
-//    	if(isGameReady){
-    	shufflePokemon(); 
-    	gameJFrame = new JFrame("Pokemon Go!");
+    	Object stringArray[] = {iknowString, teachmeString};
+    	
+    	int returnvalue = JOptionPane.showOptionDialog(null, "Continue printing?", "Select an Option",
+    	        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray,
+    	        stringArray[0]);
+    	if(stringArray[returnvalue].equals(iknowString)){
+	    	StartScreen();
+	//    	if(isGameReady){
+	    	shufflePokemon(); 
+	    	gameJFrame = new JFrame("Pokemon Showdown!");
+    	}else if(stringArray[returnvalue].equals(teachmeString)){
+    		Instructions();	
+    	}
  
 	}
+    private void Instructions(){
+    	InstructionFrame.setSize(800, 500);
+    	JLabel background = new JLabel();
+    	background.setIcon(new ImageIcon(""));
+    	background.setVisible(true);
+    	background.setLayout(new BorderLayout());
+    	InstructionFrame.add(background);
+    	
+    	NextButton.setText("Got It!");
+    	NextButton.addActionListener(this);
+    	NextButton.setBounds(267,334,100,50);
+    	InstructionContainer.add(NextButton);
+    	
 
-        
+    	InstructionFrame.add(InstructionContainer);
+    	InstructionFrame.setLocationRelativeTo(null);
+    	InstructionContainer.setVisible(true);
+    	InstructionFrame.setVisible(true);
+    	InstructionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
    
     private void StartScreen(){
     	JLabel background = new JLabel();
@@ -734,7 +769,6 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		}
 		isAllDead(); 
 	}
-
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -787,9 +821,15 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		
 	}
 	
-
 	public void actionPerformed(ActionEvent event){ // button pressed
 		playercountdown = DISPLAY_TIME;
+		
+		if(event.getSource() ==NextButton){
+			InstructionFrame.setVisible(false);
+			StartScreen();
+	    	gameJFrame = new JFrame("Pokemon Showdown!");
+
+		}
 		
 		if(event.getSource() == goButton){
 			StartGame();
@@ -963,8 +1003,6 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 
 	}
 
-
-
 	@Override
 	public void mouseEntered(MouseEvent arg0) {}
 	@Override
@@ -973,7 +1011,5 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	public void mousePressed(MouseEvent arg0) {}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}
-
-	
 	
 }
