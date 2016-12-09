@@ -18,11 +18,6 @@ public class CPUaction extends PokemonSuper {
 	}
 	
 	protected boolean cpuMoveHard(double[][] array, int[] playerr, int player, int[] cpuu, int cpu) {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-		System.out.println(array[i][j]);
-			}
-		}
 		if (array[cpuu[cpu]][playerr[player]] >= array[cpuu[cpu]][NORMAL]) {
 			return false; 
 		} else {

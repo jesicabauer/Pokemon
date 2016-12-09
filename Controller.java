@@ -5,7 +5,6 @@ package game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -70,8 +69,10 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	public static double playerHealth[] = new double[ASSIGNED_POKEMON];
 	public static double cpuHealth[] = new double[ASSIGNED_POKEMON];
 	
-	public static double CPU_MAX_HEALTH;
-	public static double PLAYER_MAX_HEALTH;
+	public static double EASY_HEALTH = 100;
+	public static double HARD_HEALTH = 75; 
+	public static double cpuMaxHealth;
+	public static double playerMaxHealth;
 	
 	public static boolean isDead[] = new boolean[NUM_OF_TYPES];
 	public static boolean isPlayerDead[] = new boolean[ASSIGNED_POKEMON];
@@ -219,12 +220,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		CPUName = RivalName.getText().toUpperCase();
 		
 		if(CurrentButton.equals(HardButton)){
-			PLAYER_MAX_HEALTH = 75;
-			CPU_MAX_HEALTH = 75;
+			playerMaxHealth = HARD_HEALTH;
+			cpuMaxHealth = HARD_HEALTH;
 			GameDisplay();
 		}else{
-			PLAYER_MAX_HEALTH = 100;
-			CPU_MAX_HEALTH = 100;
+			playerMaxHealth = EASY_HEALTH;
+			cpuMaxHealth = EASY_HEALTH;
 			GameDisplay();
 		}
     }
@@ -347,8 +348,8 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		for (int i = 0; i < NUM_OF_POKEMON; i++) {
 			pokemon[i] = temp.get(i);
 			if (i<3){
-				pokemonHealth[i] = PLAYER_MAX_HEALTH;
-				pokemonHealth[i+3] = CPU_MAX_HEALTH;
+				pokemonHealth[i] = playerMaxHealth;
+				pokemonHealth[i+3] = cpuMaxHealth;
 			}
 			isDead[i] = false; 
 //			System.out.print(pokemon[i]);
@@ -357,19 +358,19 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	}
 	
 	private void assignPokemon() {
-		System.out.println("Your Pokemon are: ");
+//		System.out.println("Your Pokemon are: ");
 		for (int i = 0; i < ASSIGNED_POKEMON; i++) {
 			playerPokemon[i] = pokemon[i]; 
 			playerHealth[i] = pokemonHealth[i]; 
 			isPlayerDead[i] = isDead[i]; 
-			System.out.println(whichPokemon(pokemon[i]));
+//			System.out.println(whichPokemon(pokemon[i]));
 		}
-		System.out.println("The CPU's Pokemon are: "); 
+//		System.out.println("The CPU's Pokemon are: "); 
 		for (int i = 0; i < ASSIGNED_POKEMON; i++) {
 			cpuPokemon[i] = pokemon[i+ASSIGNED_POKEMON];
 			cpuHealth[i] = pokemonHealth[i+ASSIGNED_POKEMON];
 			isCPUDead[i] = isDead[i+ASSIGNED_POKEMON];
-			System.out.println(whichPokemon(pokemon[i+ASSIGNED_POKEMON]));
+//			System.out.println(whichPokemon(pokemon[i+ASSIGNED_POKEMON]));
 		}
 	}
 	
@@ -392,7 +393,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new GridLayout(2,1));
 		JLabel PokemonName = new JLabel("<html><font size=5>" + whichPokemon(Pokemon) + "</font></html>", SwingConstants.CENTER);
-		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + PLAYER_MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
+		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + playerMaxHealth + "</font></html>",  SwingConstants.CENTER);
 		
 		myPanel.add(PokemonName);
 		myPanel.add(Health);
@@ -403,7 +404,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new GridLayout(2,1));
 		JLabel PokemonName = new JLabel("<html><font size=5>" + whichPokemon(Pokemon) + "</font></html>", SwingConstants.CENTER);
-		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + CPU_MAX_HEALTH + "</font></html>",  SwingConstants.CENTER);
+		JLabel Health = new JLabel("<html>(" + myArrays.getTypeName(Pokemon) + ") <font size=4>" + pokemonHealth+"/" + cpuMaxHealth + "</font></html>",  SwingConstants.CENTER);
 		
 		myPanel.add(PokemonName);
 		myPanel.add(Health);
@@ -503,12 +504,15 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 				cpuHealth[i] = 0;
 				isCPUDead[i] = true; 
 //				System.out.println(whichPokemon(cpuPokemon[i]) + " fainted!");
-				
 
 				userMessagePanel.setVisible(true);
 				userMessagePanel.setVisible(true);
 				int pokemonAct = ++CPUActive;
 				CPUActive = pokemonAct%3; 
+				if (cpuHealth[CPUActive] == 0) {
+					pokemonAct = ++CPUActive;
+					CPUActive = pokemonAct%3; 
+				}
 				userMessageLabel.setVisible(false);
 				userMessageLabel.setText("<html>" + CPUName + "'s " + whichPokemon(cpuPokemon[i]) + " fainted! <br>"+CPUName+" switched to " + whichPokemon(cpuPokemon[CPUActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
@@ -522,11 +526,14 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 				isPlayerDead[i] = true;
 //				System.out.println(whichPokemon(playerPokemon[i]) + " fainted!");
 				
-
 				userMessagePanel.setVisible(true);
 				userMessagePanel.setVisible(true);
 				int pokemonAct = ++PlayerActive;
 				PlayerActive = pokemonAct%3;
+				if (playerHealth[PlayerActive] == 0) {
+					pokemonAct = ++PlayerActive;
+					PlayerActive = pokemonAct%3;
+				}
 				userMessageLabel.setVisible(false);
 				userMessageLabel.setText("<html>" + "Your " + whichPokemon(playerPokemon[i]) + " fainted! <br> You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
@@ -793,6 +800,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 			EndFrame.setVisible(false);
 			didIWin = false;
 			didILose = false; 
+			@SuppressWarnings("unused")
 			Controller myController = new Controller();
 			
 		}else if(event.getSource()== ExitButton){
@@ -830,7 +838,13 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 //					cpuTurn(); 
 //				}
 			}else if(event.getSource() == switch1Button){ // Switch to pokemon[0]
-				if (PlayerActive == 0) {
+				if (playerHealth[0] == 0) {
+					userMessageLabel.setVisible(false);
+					userMessageLabel.setText("That Pokemon has already fainted!");
+					userMessageLabel.setVisible(true);	
+					userMessagePanel.setVisible(true);
+				}
+				else if (PlayerActive == 0) {
 					userMessageLabel.setVisible(false);
 					userMessageLabel.setText("That Pokemon is already out!");
 					userMessageLabel.setVisible(true);	
@@ -843,8 +857,15 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 //					cpuTurn(); 
 //				}
 				}
+				
 			}else if(event.getSource() == switch2Button){ // Switch to pokemon[1]
-				if (PlayerActive == 1) {
+				if (playerHealth[1] == 0) {
+					userMessageLabel.setVisible(false);
+					userMessageLabel.setText("That Pokemon has already fainted!");
+					userMessageLabel.setVisible(true);	
+					userMessagePanel.setVisible(true);
+				}
+				else if (PlayerActive == 1) {
 					userMessageLabel.setVisible(false);
 					userMessageLabel.setText("That Pokemon is already out!");
 					userMessageLabel.setVisible(true);	
@@ -858,7 +879,13 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 //				} 
 				}
 			}else if(event.getSource() == switch3Button){ // switch to pokemon[2]
-				if (PlayerActive == 2) {
+				if (playerHealth[2] == 0) {
+					userMessageLabel.setVisible(false);
+					userMessageLabel.setText("That Pokemon has already fainted!");
+					userMessageLabel.setVisible(true);	
+					userMessagePanel.setVisible(true);
+				}
+				else if (PlayerActive == 2) {
 					userMessageLabel.setVisible(false);
 					userMessageLabel.setText("That Pokemon is already out!");
 					userMessageLabel.setVisible(true);	
