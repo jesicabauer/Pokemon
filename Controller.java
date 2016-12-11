@@ -46,6 +46,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 	public final static int PSYCHIC = 6; 
 	public final static int STEEL = 7; 
 	public final static int FAIRY = 8;
+	public final static int MAX_NAME_LENGTH = 9; 
 	
 	PokemonSuper game = new PokemonSuper();
 	InstantiateArrays myArrays = new InstantiateArrays();
@@ -255,8 +256,21 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		
 		StartFrame.setVisible(false);
 		
-		PlayerName = myName.getText().toUpperCase();
-		CPUName = RivalName.getText().toUpperCase();
+		if (myName.getText().equals("")) {
+			PlayerName = "ERICA";
+		} else if(myName.getText().trim().length() > MAX_NAME_LENGTH) { 
+			PlayerName = myName.getText().trim().substring(0,MAX_NAME_LENGTH) + "...";
+		} else {
+			PlayerName = myName.getText().toUpperCase().trim();
+		}
+		if (RivalName.getText().equals("")) {
+			CPUName = "JESICA";
+		} else if (RivalName.getText().trim().length() > MAX_NAME_LENGTH) {
+			CPUName = RivalName.getText().trim().substring(0,MAX_NAME_LENGTH) + "...";
+		} else {
+			CPUName = RivalName.getText().toUpperCase().trim();
+		}
+		
 		
 		if(CurrentButton.equals(HardButton)){
 			playerMaxHealth = HARD_HEALTH;
