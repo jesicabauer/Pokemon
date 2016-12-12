@@ -492,10 +492,10 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 		userMessageLabel.setVisible(false);
 		if (isPlayerTurn) {
 			if (!isNormalMove) {		
-				userMessageLabel.setText("<html>Your " + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
+				userMessageLabel.setText("<html> " + PlayerName + "'s " + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit() +"</html>");
 			
 			} else {
-				userMessageLabel.setText("<html>Your " + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getNormMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
+				userMessageLabel.setText("<html> " + PlayerName + "'s " + whichPokemon(playerPokemon[PlayerActive])+" used " + myArrays.getNormMove(playerPokemon[PlayerActive]) + ". <br>" + effectiveness() + pokemonHit()+ "</html>");
 			}
 			userMessageLabel.setVisible(true);
 
@@ -588,7 +588,7 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 					PlayerActive = pokemonAct%3;
 				}
 				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("<html>" + "Your " + whichPokemon(playerPokemon[i]) + " fainted! <br> You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
+				userMessageLabel.setText("<html>" + PlayerName + "'s " + whichPokemon(playerPokemon[i]) + " fainted! <br> You switched to " + whichPokemon(playerPokemon[PlayerActive]) + ". </html>");
 				userMessageLabel.setVisible(true);
 				faintedSwitch(); 
 				UpdateHealth();
@@ -742,12 +742,13 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 			
 			if (didIWin) {
 //				System.out.println("Player defeated! You won!");
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("Player defeated! You won!");
-				userMessageLabel.setVisible(true);
-
-				userMessagePanel.setVisible(true);
-				isPlayerTurn = false; 
+//				userMessageLabel.setVisible(false);
+//				userMessageLabel.setText("Player defeated! You won!");
+//				userMessageLabel.setVisible(true);
+//
+//				userMessagePanel.setVisible(true);
+//				isPlayerTurn = true; 
+				isGameReady = false; 
 				EndScreen();
 			}
 		} else {
@@ -759,11 +760,12 @@ class Controller extends TimerTask implements ActionListener, ItemListener, Mous
 			}
 			if (didILose) {
 //				System.out.println("You have been defeated! You lost!");
-				userMessageLabel.setVisible(false);
-				userMessageLabel.setText("You have been defeated! You lost!");
-				userMessageLabel.setVisible(true);
-
-				userMessagePanel.setVisible(true);
+//				userMessageLabel.setVisible(false);
+//				userMessageLabel.setText("You have been defeated! You lost!");
+//				userMessageLabel.setVisible(true);
+//
+//				userMessagePanel.setVisible(true);
+				isGameReady = false; 
 				EndScreen();
 			}
 		}
